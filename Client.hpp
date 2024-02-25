@@ -19,6 +19,7 @@ class Server;
 class Client
 {
     private:
+        int socketNumber;
         int hostName;
         std::string uId;
 
@@ -28,11 +29,15 @@ class Client
         std::string usrName;
         std::string usrSurname;
         std::string usrUser;
+        std::string realIp;
     public:
         Client();
         void operator=(Client const &cpy);
         Client(Client const &cpy);
         Client(int hostName, std::string uId);
+        void setRealIp(const std::string &realIp);
+        void setSocket(const int socket);
+        std::string &getRealIp()const;
         Client(std::string usrPass, std::string usrNick, std::string usrUser, std::string usrIp, std::string usrName, std::string usrSurname);
         ~Client();
 };

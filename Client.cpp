@@ -4,6 +4,7 @@ Client::Client(int hostName, std::string uId)
 {
     this->hostName = hostName;
     this->uId = uId;
+    this->usrName = "";
 }
 
 Client::Client(std::string usrPass, std::string usrNick, std::string usrUser, std::string usrIp, std::string usrName, std::string usrSurname)
@@ -24,3 +25,25 @@ Client::Client(std::string usrPass, std::string usrNick, std::string usrUser, st
 }
 
 Client::~Client(){}
+
+void Client::setRealIp(const std::string &realIp)
+{
+    this->realIp = realIp;
+}
+
+void Client::setSocket(const int socket)
+{
+    this->socketNumber = socket;
+}
+
+Client::Client(Client const &cpy)
+{
+    this->realIp = cpy.realIp;
+    this->hostName = cpy.hostName;
+    this->usrIp = cpy.usrIp;
+}
+
+Client::Client()
+{
+
+}

@@ -21,7 +21,7 @@ class Client;
 class Server
 {
     private:
-        std::vector<struct pollfd>  fds;
+        std::vector<struct pollfd >  fds;
         int sockfd;
         int port;
         std::string password;
@@ -32,6 +32,8 @@ class Server
         int optv;
         socklen_t adr_len;
         int acc_val;
+
+        std::vector<Client > clients;
     public:
         Server();
         Server(Server const &cpy);

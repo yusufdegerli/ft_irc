@@ -1,4 +1,5 @@
 #include "Server.hpp"
+#include "Client.hpp"
 
 Server::Server(int port, std::string password)
 {
@@ -98,7 +99,7 @@ void Server :: serverFunc()
 {
     int recv_val;
     std::vector<std::string> bufferRaw;
-    char buff[1024];
+    sockaddr_in client_address;
 
     this->setServerfd(socket(AF_INET, SOCK_STREAM, 0));
     setsockopt(this->serverfd, SOL_SOCKET, SO_REUSEADDR, &this->optv, sizeof(this->optv));
@@ -107,22 +108,54 @@ void Server :: serverFunc()
     check_listen_status(listen(this->serverfd, 5));//Gelen bağlantıları, bekletir. İkinci parametre kaç tane bağlantının beklemesi gerektiğini söyler.
 
     std::cout << "Server is listening..." << std::endl;
-    check_accept_status(accept(this->serverfd, (sockaddr *)&this->server_address, &this->adr_len));
-
+    // struct pollfd *fds = new pollfd();
+    struct pollfd tmp;
+	this->fds.push_back(tmp);
+    this->fds[0].fd = this->serverfd;
+    this->fds[0].events = POLLIN;
     while(1)
     {
-        char buff[1024] = {0}; // her recv fonksiyonu çalıştığında saçma sapan, ascii dışında karakterler geliyor. Böyle yaparak bunu önlüyorum.
-        recv_val = recv(this->acc_val,buff,sizeof(buff), 0);
-        if (recv_val == -1)
-        {
-            std::cerr << "recv error" << std::endl;
-            exit(1);
+        int poll_status = poll(&(this->fds[0]), this->fds.size(), -1);// Süresiz bekleyin
+        if (poll_status == -1) {
+            perror("Poll error");
+            exit(EXIT_FAILURE);
         }
-        else
-        {
-            pieceByPiece(buff, bufferRaw);
-            std::cout << "client message: " << buff << std::endl;
+        if (this->fds[0].revents & POLLIN) {
+            socklen_t len = sizeof(client_address);
+            check_accept_status(accept(serverfd, (sockaddr *)&client_address, &len));
+            Client tmp;
+            tmp.setSocket(this->acc_val);
+            unsigned long clientAddr = ntohl(client_address.sin_addr.s_addr);
+            std::string clientIP = std::to_string((clientAddr >> 24) & 0xFF) + "." + std::to_string((clientAddr >> 16) & 0xFF) + "." + std::to_string((clientAddr >> 8) & 0xFF) + "." + std::to_string(clientAddr & 0xFF);
+            tmp.setRealIp(clientIP);
+            this->clients.push_back(tmp);
+            std::cout << "aaaaa" << std::endl;
+            struct pollfd tmp2;
+			this->fds.push_back(tmp2);
+			this->fds.at(this->fds.size() - 1).fd = this->acc_val;
+			this->fds.at(this->fds.size() - 1).events = POLLIN;
+
         }
+        for (size_t i = 1; i < this->fds.size(); i++)
+        {
+            if (this->fds[i].fd != -1 && this->fds[i].revents & POLLIN) {
+                char buff[1024] = {0}; // her recv fonksiyonu çalıştığında saçma sapan, ascii dışında karakterler geliyor. Böyle yaparak bunu önlüyorum.
+                recv_val = recv(this->fds[i].fd, buff, sizeof(buff), 0);
+                if (recv_val <= 0)
+                {
+                    //recv okuma yapamazsa veya client bağlantıyı kopardıysa buraya giriyor.
+                    std::cerr << "recv error" << std::endl;
+                    exit(1);
+                }
+                else
+                {
+                    pieceByPiece(buff, bufferRaw);
+                    std::cout << "client message: " << buff << std::endl;
+                }
+            
+            }
+        }
+
     }
     close(this->acc_val);
     close(this->serverfd);

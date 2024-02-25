@@ -13,6 +13,10 @@ all: $(NAME)
 $(NAME): $(OBJ)
 		$(CPP) $(FLAGS) $(OBJ) -o $(NAME)
 
+%.o: %.cpp
+	$(CPP) $(FLAGS) -c $< -o $@
+
+
 clean:
 	rm -rf $(OBJ)
 
