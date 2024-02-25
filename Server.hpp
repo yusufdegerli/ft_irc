@@ -26,7 +26,12 @@ class Server
         int port;
         std::string password;
         int acceptfd;
-        sockaddr_in serverAdress;
+
+        sockaddr_in server_address;
+        int serverfd;
+        int optv;
+        socklen_t adr_len;
+        int acc_val;
     public:
         Server();
         Server(Server const &cpy);
@@ -34,7 +39,13 @@ class Server
         Server(int port, std::string password);
         ~Server();
 
+        void serverFunc();
+        void setServerfd(int server_fd);
+        void check_bind_status(int bind_val);
+        void check_listen_status(int list_val);
+        void check_accept_status(int accept_val);
+
     
 };
-void serverFunc();
+//void serverFunc();
 void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw);

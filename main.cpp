@@ -4,13 +4,13 @@ int main(int ac, char **av)
 {
     if(ac != 3)
     {
-        std::cerr << "Error! You need use 2 arguemnts!\n";
+        std::cerr << "Usage: ./irserv <port> <password>" << std::endl;
         return EXIT_FAILURE;
     }
     else
     {
         Server serv(atoi(av[1]), av[2]);
+        serv.serverFunc();
     }
-    serverFunc();
     return 0;
 }

@@ -4,6 +4,12 @@ Server::Server(int port, std::string password)
 {
     this->port = port;
     this->password = password;
+    this->optv = 1;
+
+    this->server_address.sin_family = AF_INET;
+    this->server_address.sin_port = htons(this->port);
+    this->server_address.sin_addr.s_addr = INADDR_ANY;
+    this->adr_len = sizeof(this->server_address);
 }
 
 void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw)
@@ -48,53 +54,65 @@ void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw)
     information++;
 }
 
+void Server :: setServerfd(int server_fd)
+{
+    this->serverfd = server_fd;
 
-void serverFunc(){
-    int serverfd;
-    sockaddr_in server_address;
-    int bind_val;
-    int list_val;
-    int accept_val;
-    int recv_val;
-    std::vector<std::string> bufferRaw;
-    char buff[1024];
-
-    serverfd = socket(AF_INET, SOCK_STREAM, 0);
-    if (serverfd == -1){
+    if (this->serverfd == -1)
+    {
         perror("Socket creation failed");
         exit(EXIT_FAILURE);
     }
+}
 
-    int optval = 1;         /* BU İKİ SATIRI YORUMA ALMAYI UNUTMAYIN AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA */
-    setsockopt(serverfd, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
-
-    server_address.sin_family = AF_INET;
-    server_address.sin_port = htons(6667);
-    server_address.sin_addr.s_addr = INADDR_ANY;
-    bind_val = bind(serverfd, (const sockaddr *)&server_address, sizeof(server_address)); // istenilen soketi, verilen adrese bağlıyor. BU kadar!
+void Server :: check_bind_status(int bind_val)
+{
     if (bind_val == -1)
     {
         std::cerr << "bind error" << std::endl;
         exit(1);
     }
-    list_val = listen(serverfd, 5);//Gelen bağlantıları, bekletir. İkinci parametre kaç tane bağlantının beklemesi gerektiğini söyler.
+}
+
+void Server :: check_listen_status(int list_val)
+{
     if (list_val == -1)
     {
         std::cerr << "listen error" << std::endl;
         exit(1);
     }
-    std::cout << "server is listening" << std::endl;
-    socklen_t len = sizeof(server_address); 
-    accept_val = accept(serverfd, (sockaddr *)&server_address, &len);
+}
+
+void Server :: check_accept_status(int accept_val)
+{
     if (accept_val == -1)
     {
         std::cerr << "accept error" << std::endl;
         exit(1);
     }
+
+    this->acc_val = accept_val;
+}
+
+void Server :: serverFunc()
+{
+    int recv_val;
+    std::vector<std::string> bufferRaw;
+    char buff[1024];
+
+    this->setServerfd(socket(AF_INET, SOCK_STREAM, 0));
+    setsockopt(this->serverfd, SOL_SOCKET, SO_REUSEADDR, &this->optv, sizeof(this->optv));
+
+    check_bind_status(bind(this->serverfd, (const sockaddr *)&this->server_address, this->adr_len)); // istenilen soketi, verilen adrese bağlıyor. BU kadar!
+    check_listen_status(listen(this->serverfd, 5));//Gelen bağlantıları, bekletir. İkinci parametre kaç tane bağlantının beklemesi gerektiğini söyler.
+
+    std::cout << "Server is listening..." << std::endl;
+    check_accept_status(accept(this->serverfd, (sockaddr *)&this->server_address, &this->adr_len));
+
     while(1)
     {
         char buff[1024] = {0}; // her recv fonksiyonu çalıştığında saçma sapan, ascii dışında karakterler geliyor. Böyle yaparak bunu önlüyorum.
-        recv_val = recv(accept_val,buff,sizeof(buff), 0);
+        recv_val = recv(this->acc_val,buff,sizeof(buff), 0);
         if (recv_val == -1)
         {
             std::cerr << "recv error" << std::endl;
@@ -106,8 +124,8 @@ void serverFunc(){
             std::cout << "client message: " << buff << std::endl;
         }
     }
-    close(accept_val);
-    close(serverfd);
+    close(this->acc_val);
+    close(this->serverfd);
 }
 
 Server::~Server(){}
