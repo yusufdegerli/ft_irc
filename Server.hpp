@@ -34,6 +34,7 @@ class Server
         int acc_val;
 
         std::vector<Client > clients;
+        std::vector<std::string> commands;
     public:
         Server();
         Server(Server const &cpy);
@@ -48,8 +49,11 @@ class Server
         void checkAcceptStatus(int accept_val);
         void userAccept();
         void checkPollStatus(int poll_status);
-
-    
+        void parseMessage(char *buffer);
+        void executeCommands(int fd);
+        void PASS(Client &client);
+        void NICK(Client &client);
+        void USER(Client &client);
 };
 //void serverFunc();
 void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw);

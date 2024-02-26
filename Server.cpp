@@ -12,7 +12,7 @@ Server::Server(int port, std::string password)
     this->adr_len = sizeof(this->server_address);
 }
 
-void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw, Client *New)
+void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw, Client *client)
 {
     std::string line;
 
@@ -27,31 +27,31 @@ void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw, Client *New)
     {
         bufferRaw.push_back(line);
     }   
-    if (New->getInformation() == 2 && bufferRaw.empty())
+    if (client->getInformation() == 2 && bufferRaw.empty())
     {
-        New->setUsrPass(bufferRaw[0].substr(6, bufferRaw[0].size() -1));
-        New->setUsrNick(bufferRaw[1].substr(5, bufferRaw[1].size() -1));
+        client->setUsrPass(bufferRaw[0].substr(6, bufferRaw[0].size() -1));
+        client->setUsrNick(bufferRaw[1].substr(5, bufferRaw[1].size() -1));
         lastStr = bufferRaw[2];
         lastName = strrchr(lastStr.c_str(), ' ');
-        New->setUsrSurname(lastName.erase(0,1));
+        client->setUsrSurname(lastName.erase(0,1));
         len = lastStr.size() - lastName.size();
         int i = len;
         while(!isdigit(lastStr.c_str()[i]))
             i--;
-        New->setUsrName(lastStr.substr(i + 1, len - i - 1));
+        client->setUsrName(lastStr.substr(i + 1, len - i - 1));
         int index = lastStr.find(':');
         index -= 2;
         len -= index;
         while(lastStr.c_str()[index] != ' ')
             index--;
-        New->setHostname(lastStr.substr(index + 1, len - index));
+        client->setHostname(lastStr.substr(index + 1, len - index));
         index--;
         while(lastStr.c_str()[index] != ' ')
             index--;
-        New->setUsrUser(lastStr.substr(5, index - 5));
+        client->setUsrUser(lastStr.substr(5, index - 5));
         //Client kullanici(passwd, nick, user, ip, name, lastName.erase(0, 1));
     }
-    New->setInformation(New->getInformation() + 1);
+    client->setInformation(client->getInformation() + 1);
 }
 
 void Server :: setServerfd(int server_fd)
@@ -126,6 +126,40 @@ void Server :: checkPollStatus(int poll_status)
     }
 }
 
+void Server :: parseMessage(char *buffer)
+{
+    std::string str(buffer);
+    if (str.length() == 0)
+        return ;
+    for (size_t i = 0; i < str.length(); i++)
+    {
+        if (str[i] >= 9 && str[i] <= 13)
+            str[i] = ' ';
+    }
+
+    std::string comm;
+    std::istringstream buff(buffer);
+    this->commands.clear();
+
+    while (std::getline(buff, comm, ' '))
+    {
+        if (comm.length() > 0)
+            this->commands.push_back(comm);
+    }
+
+    str.clear();
+}
+
+void Server :: executeCommands(int fd)
+{
+    Client *client = &this->clients[fd - 1];
+    void (Server::*cmds[])(Client &client) = {&Server::PASS, &Server::NICK, &Server::USER};
+    std::string commands[] = {"PASS", "NICK", "USER"};
+
+    (void)client;
+    (void)cmds;
+}
+
 void Server :: serverFunc()
 {
     int recv_val;
@@ -151,16 +185,25 @@ void Server :: serverFunc()
             if (this->fds[i].fd != -1 && this->fds[i].revents & POLLIN) {
                 char buff[1024] = {0}; // her recv fonksiyonu çalıştığında saçma sapan, ascii dışında karakterler geliyor. Böyle yaparak bunu önlüyorum.
                 recv_val = recv(this->fds[i].fd, buff, sizeof(buff), 0);
-                if (recv_val <= 0)
+                if (recv_val < 0)
                 {
                     //recv okuma yapamazsa veya client bağlantıyı kopardıysa buraya giriyor.
                     std::cerr << "recv error" << std::endl;
                     exit(1);
                 }
+                else if (recv_val == 0)
+                {
+                    close(this->fds[i].fd);
+                    this->fds[i].fd = 0;
+                }
                 else
                 {
                     //int j = 0;
                     std::cout << this->clients[i - 1].getInformation() << std::endl;
+                    // parseMessage(buff);
+                    // executeCommands(i);
+                    // for (size_t i = 0; i < this->commands.size(); i++)
+                    //     std::cout << (this->commands[i]) << std::endl;
                     pieceByPiece(buff, bufferRaw, &this->clients[i - 1]);
                     std::cout << "client message: " << buff << std::endl;
                 }
