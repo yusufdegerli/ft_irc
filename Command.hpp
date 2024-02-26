@@ -36,4 +36,6 @@ class Command
         void commandOper();         //Bir kullanıcıya operatör olarak izin veriyorsun
         void commandQuit();         //Kullanıcının sunucudan bağlantısının kopması
 
+        void runCommands(std::string buffer, void func());
+
 };

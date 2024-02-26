@@ -20,7 +20,7 @@ class Client
 {
     private:
         int socketNumber;
-        int hostName;
+        std::string hostName;
         std::string uId;
 
         std::string usrPass;
@@ -34,10 +34,21 @@ class Client
         Client();
         void operator=(Client const &cpy);
         Client(Client const &cpy);
-        Client(int hostName, std::string uId);
-        void setRealIp(const std::string &realIp);
+        //Client(int hostName, std::string uId);
+        
         void setSocket(const int socket);
+        void setHostname(const std::string &hostname);
+        void setuId(const std::string &uId);
+        void setUsrPass(const std::string &usrPass);
+        void setUsrNick(const std::string &usrNick);
+        void setUsrIp(const std::string &usrIp);
+        void setUsrName(const std::string &usrName);
+        void setUsrSurname(const std::string &usrSurname);
+        void setUsrUser(const std::string &usrUser);
+        void setRealIp(const std::string &realIp);
+        
         std::string &getRealIp()const;
-        Client(std::string usrPass, std::string usrNick, std::string usrUser, std::string usrIp, std::string usrName, std::string usrSurname);
+        
+        //Client(std::string usrPass, std::string usrNick, std::string usrUser, std::string usrIp, std::string usrName, std::string usrSurname);
         ~Client();
 };

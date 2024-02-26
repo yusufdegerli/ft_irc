@@ -1,5 +1,4 @@
 #include "Server.hpp"
-#include "Client.hpp"
 
 Server::Server(int port, std::string password)
 {
@@ -13,7 +12,7 @@ Server::Server(int port, std::string password)
     this->adr_len = sizeof(this->server_address);
 }
 
-void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw)
+void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw, Client New)
 {
     static int information = 1;
     std::string line;
@@ -32,25 +31,26 @@ void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw)
     std::string passwd = bufferRaw[0].substr(6, bufferRaw[0].size() -1);
     if (information == 2)
     {
-        std::string nick = bufferRaw[1].substr(5, bufferRaw[1].size() -1);
+        New.setUsrNick(bufferRaw[1].substr(5, bufferRaw[1].size() -1));
         lastStr = bufferRaw[2];
         lastName = strrchr(lastStr.c_str(), ' ');
+        New.setUsrSurname(lastName.erase(0,1));
         len = lastStr.size() - lastName.size();
         int i = len;
         while(!isdigit(lastStr.c_str()[i]))
             i--;
-        name = lastStr.substr(i + 1, len - i - 1);
+        New.setUsrName(lastStr.substr(i + 1, len - i - 1));
         int index = lastStr.find(':');
         index -= 2;
         len -= index;
         while(lastStr.c_str()[index] != ' ')
             index--;
-        ip = lastStr.substr(index + 1, len - index - 1);
+        New.setHostname(lastStr.substr(index + 1, len - index));
         index--;
         while(lastStr.c_str()[index] != ' ')
             index--;
-        user = lastStr.substr(5, index - 5);
-        Client kullanici(passwd, nick, user, ip, name, lastName.erase(0, 1));
+        New.setUsrUser(lastStr.substr(5, index - 5));
+        //Client kullanici(passwd, nick, user, ip, name, lastName.erase(0, 1));
     }
     information++;
 }
@@ -149,7 +149,8 @@ void Server :: serverFunc()
                 }
                 else
                 {
-                    pieceByPiece(buff, bufferRaw);
+                    //int j = 0;
+                    pieceByPiece(buff, bufferRaw, this->clients[i]);
                     std::cout << "client message: " << buff << std::endl;
                 }
             
