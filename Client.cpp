@@ -7,6 +7,7 @@ Client::Client(int fd)
     this->fd = fd;
     this->isActive = false;
     this->isLogged = false;
+    std::cout << "fd " << this->fd << std::endl;
 }
 
 Client::Client()
@@ -88,7 +89,8 @@ void Client::setUsrPass(const std::string &usrPass)
 void Client::setUsrNick(const std::string &usrNick)
 {
     this->usrNick = usrNick;
-    std::cout << "user nick: " << this->usrNick << std::endl;
+    std::cout << "Client " << this->socketNumber << " set nickname: " << this->usrNick <<std::endl;
+    this->print("Welcome, " + this->getNick() + "\n");
 }
 
 void Client::setUsrIp(const std::string &usrIp)
@@ -99,7 +101,8 @@ void Client::setUsrIp(const std::string &usrIp)
 void Client::setUsrName(const std::string &usrName)
 {
     this->usrName = usrName;
-    std::cout << "user name: " << this->usrName << std::endl;
+    std::cout << "Client " << this->socketNumber << " set nickname: " << this->usrName <<std::endl;
+    this->print("Real name: " + this->usrName + "\n");
 }
 
 void Client::setUsrSurname(const std::string &usrSurname)
@@ -128,3 +131,46 @@ void Client::setInformation(const int &information)
 int Client::getInformation()const{return this->information;}
 
 Client::~Client(){}
+
+void Client :: setLoggin()
+{
+    this->isLogged = true;
+    std::cout << "Client " << this->socketNumber << " logged in the system" << std::endl;
+    this->print("You are in the system\n");
+}
+
+int Client :: getFd()
+{
+    return this->fd;
+}
+
+void Client :: setFd(int fd)
+{
+    this->fd = fd;
+}
+
+int Client :: getSocket()
+{
+    return this->socketNumber;
+}
+
+bool Client :: getLoggedStatus()
+{
+    return this->isLogged;
+}
+
+void Client :: print(std::string str)
+{
+    send(this->socketNumber, str.c_str(), str.length(),  0);
+    // std::cout << str << std::endl;
+}
+
+std::string Client :: getNick()
+{
+    return this->usrNick;
+}
+
+std::string Client :: getName()
+{
+    return this->usrName;
+}

@@ -101,7 +101,9 @@ void Server :: userAccept()
     if (this->fds[0].revents & POLLIN)
     {
         checkAcceptStatus(accept(this->serverfd, (sockaddr *)&this->server_address, &this->adr_len));
+        
         Client client(this->acc_val);
+        client.setFd(this->acc_val);
 
         client.setInformation(1);
         client.setSocket(this->acc_val);
@@ -110,6 +112,9 @@ void Server :: userAccept()
         client.setRealIp(clientIP);
 
         this->clients.push_back(client);
+        this->clients[this->acc_val - 4].setFd(this->acc_val);
+        // std::cout << "client fd: " << client.getFd() << "; clients[fd]: " << this->clients[0].getFd() << std::endl;
+
         std::cout << "Client " << this->acc_val << " connected successfully" << std::endl;
         connect.fd = this->acc_val;
         connect.events = POLLIN;
@@ -138,7 +143,7 @@ void Server :: parseMessage(char *buffer)
     }
 
     std::string comm;
-    std::istringstream buff(buffer);
+    std::istringstream buff(str);
     this->commands.clear();
 
     while (std::getline(buff, comm, ' '))
@@ -153,11 +158,31 @@ void Server :: parseMessage(char *buffer)
 void Server :: executeCommands(int fd)
 {
     Client *client = &this->clients[fd - 1];
+
     void (Server::*cmds[])(Client &client) = {&Server::PASS, &Server::NICK, &Server::USER};
     std::string commands[] = {"PASS", "NICK", "USER"};
+    size_t i;
 
-    (void)client;
-    (void)cmds;
+    if (this->commands.size() == 0)
+        return ;
+    for (i = 0; i < 3; i++)
+    {
+        if (this->commands[0] == commands[i])
+        {
+            (this->*(cmds[i]))(*client);
+            break;
+        }
+    }
+    if (i == 3)
+    {
+        client->print("Command wasn't found\n");
+    }
+}
+
+int Server :: checkActivation()
+{
+    std::cout << "check activation for other functions" << std::endl;
+    return 1;
 }
 
 void Server :: serverFunc()
@@ -198,13 +223,9 @@ void Server :: serverFunc()
                 }
                 else
                 {
-                    //int j = 0;
-                    std::cout << this->clients[i - 1].getInformation() << std::endl;
-                    // parseMessage(buff);
-                    // executeCommands(i);
-                    // for (size_t i = 0; i < this->commands.size(); i++)
-                    //     std::cout << (this->commands[i]) << std::endl;
-                    pieceByPiece(buff, bufferRaw, &this->clients[i - 1]);
+                    parseMessage(buff);
+                    executeCommands(i);
+                    //pieceByPiece(buff, bufferRaw, &this->clients[i - 1]);
                     std::cout << "client message: " << buff << std::endl;
                 }
             

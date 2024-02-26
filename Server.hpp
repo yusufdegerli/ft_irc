@@ -33,7 +33,7 @@ class Server
         socklen_t adr_len;
         int acc_val;
 
-        std::vector<Client > clients;
+        std::vector<Client> clients;
         std::vector<std::string> commands;
     public:
         Server();
@@ -54,6 +54,7 @@ class Server
         void PASS(Client &client);
         void NICK(Client &client);
         void USER(Client &client);
+        int checkActivation();
 };
 //void serverFunc();
 void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw);

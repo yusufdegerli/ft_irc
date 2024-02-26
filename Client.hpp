@@ -59,4 +59,12 @@ class Client
         //Client(std::string usrPass, std::string usrNick, std::string usrUser, std::string usrIp, std::string usrName, std::string usrSurname);
         ~Client();
         Client(int fd);
+        void setLoggin();
+        int getFd();
+        void setFd(int fd);
+        int getSocket();
+        bool getLoggedStatus();
+        void print(std::string str);
+        std::string getNick();
+        std::string getName();
 };
