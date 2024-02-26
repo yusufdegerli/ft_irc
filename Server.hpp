@@ -16,6 +16,8 @@
 #include <poll.h>
 
 #include "Client.hpp"
+#include "Command.hpp"
+class Command;
 class Client;
 
 class Server
@@ -49,6 +51,9 @@ class Server
         void checkAcceptStatus(int accept_val);
         void userAccept();
         void checkPollStatus(int poll_status);
+        int getAccVal();
+
+
         void parseMessage(char *buffer);
         void executeCommands(int fd);
         void PASS(Client &client);
