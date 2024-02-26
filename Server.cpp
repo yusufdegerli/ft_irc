@@ -27,9 +27,9 @@ void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw, Client *New)
     {
         bufferRaw.push_back(line);
     }   
-    std::string passwd = bufferRaw[0].substr(6, bufferRaw[0].size() -1);
-    if (New->getInformation() == 2)
+    if (New->getInformation() == 2 && bufferRaw.empty())
     {
+        New->setUsrPass(bufferRaw[0].substr(6, bufferRaw[0].size() -1));
         New->setUsrNick(bufferRaw[1].substr(5, bufferRaw[1].size() -1));
         lastStr = bufferRaw[2];
         lastName = strrchr(lastStr.c_str(), ' ');
