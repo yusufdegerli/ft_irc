@@ -1,4 +1,4 @@
-#include "../Server.hpp"
+#include "../Server/Server.hpp"
 
 void Server :: PASS(Client &client)
 {
@@ -7,6 +7,7 @@ void Server :: PASS(Client &client)
         client.print("You are already in the system\n");
         return ;
     }
+
     if (this->commands.size() != 2)
     {
         client.print("Wrong number of arguments\n");

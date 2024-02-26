@@ -1,6 +1,6 @@
 
-#include "Server.hpp"
-#include "Client.hpp"
+#include "Server/Server.hpp"
+#include "Client/Client.hpp"
 #include "Command.hpp"
 
 

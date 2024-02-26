@@ -37,3 +37,21 @@ void Server :: checkAcceptStatus(int accept_val)
 
     this->acc_val = accept_val;
 }
+
+int Server :: checkRecvStatus(int recv_val, int i)
+{
+    if (recv_val < 0)
+    {
+        //recv okuma yapamazsa veya client bağlantıyı kopardıysa buraya giriyor.
+        std::cerr << "Recv error" << std::endl;
+        exit(1);
+    }
+    else if (recv_val == 0)
+    {
+        std::cout << "Client " << i + 3 << " logged out" << std::endl;
+        close(this->fds[i].fd);
+        this->fds[i].fd = 0;
+        return 0;
+    }
+    return 1;
+}

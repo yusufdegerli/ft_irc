@@ -13,7 +13,7 @@
 #include <vector>
 #include <poll.h>
 
-#include "Server.hpp"
+#include "../Server/Server.hpp"
 class Server;
 
 class Client

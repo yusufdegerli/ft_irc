@@ -15,8 +15,8 @@
 #include <vector>
 #include <poll.h>
 
-#include "Client.hpp"
-#include "Command.hpp"
+#include "../Client/Client.hpp"
+#include "../Command.hpp"
 class Command;
 class Client;
 
@@ -60,5 +60,7 @@ class Server
         void NICK(Client &client);
         void USER(Client &client);
         int checkActivation(Client &client);
+        void start();
+        int checkRecvStatus(int recv_val, int i);
 };
 void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw);

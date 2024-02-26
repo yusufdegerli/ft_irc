@@ -1,4 +1,4 @@
-#include "../Server.hpp"
+#include "../Server/Server.hpp"
 
 void Server :: NICK(Client &client)
 {
@@ -19,6 +19,14 @@ void Server :: NICK(Client &client)
         client.print("Wrong number of arguments\n");
         return ;
     }
-
-    client.setUsrNick(this->commands[1]); // check if the same nick exists already
+    
+    for (size_t i = 0; i < this->clients.size(); i++)
+    {
+        if (this->clients[i].getNick() == this->commands[1])
+        {
+            client.print("This username already exist\n");
+            return ;
+        }
+    }
+    client.setUsrNick(this->commands[1]);
 }
