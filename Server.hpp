@@ -43,9 +43,11 @@ class Server
 
         void serverFunc();
         void setServerfd(int server_fd);
-        void check_bind_status(int bind_val);
-        void check_listen_status(int list_val);
-        void check_accept_status(int accept_val);
+        void checkBindStatus(int bind_val);
+        void checkListenStatus(int list_val);
+        void checkAcceptStatus(int accept_val);
+        void userAccept();
+        void checkPollStatus(int poll_status);
 
     
 };

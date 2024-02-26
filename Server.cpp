@@ -65,7 +65,7 @@ void Server :: setServerfd(int server_fd)
     }
 }
 
-void Server :: check_bind_status(int bind_val)
+void Server :: checkBindStatus(int bind_val)
 {
     if (bind_val == -1)
     {
@@ -74,7 +74,7 @@ void Server :: check_bind_status(int bind_val)
     }
 }
 
-void Server :: check_listen_status(int list_val)
+void Server :: checkListenStatus(int list_val)
 {
     if (list_val == -1)
     {
@@ -83,7 +83,7 @@ void Server :: check_listen_status(int list_val)
     }
 }
 
-void Server :: check_accept_status(int accept_val)
+void Server :: checkAcceptStatus(int accept_val)
 {
     if (accept_val == -1)
     {
@@ -94,47 +94,58 @@ void Server :: check_accept_status(int accept_val)
     this->acc_val = accept_val;
 }
 
+void Server :: userAccept()
+{
+    struct pollfd connect;
+
+    if (this->fds[0].revents & POLLIN)
+    {
+        checkAcceptStatus(accept(this->serverfd, (sockaddr *)&this->server_address, &this->adr_len));
+        Client client(this->acc_val);
+
+        client.setInformation(1);
+        client.setSocket(this->acc_val);
+        unsigned long clientAddr = ntohl(this->server_address.sin_addr.s_addr);
+        std::string clientIP = std::to_string((clientAddr >> 24) & 0xFF) + "." + std::to_string((clientAddr >> 16) & 0xFF) + "." + std::to_string((clientAddr >> 8) & 0xFF) + "." + std::to_string(clientAddr & 0xFF);
+        client.setRealIp(clientIP);
+
+        this->clients.push_back(client);
+        std::cout << "Client " << this->acc_val << " connected successfully" << std::endl;
+        connect.fd = this->acc_val;
+        connect.events = POLLIN;
+        this->fds.push_back(connect);
+    }
+}
+
+void Server :: checkPollStatus(int poll_status)
+{
+    if (poll_status == -1) 
+    {
+        perror("Poll error");
+        exit(EXIT_FAILURE);
+    }
+}
+
 void Server :: serverFunc()
 {
     int recv_val;
     std::vector<std::string> bufferRaw;
-    sockaddr_in client_address;
 
     this->setServerfd(socket(AF_INET, SOCK_STREAM, 0));
     setsockopt(this->serverfd, SOL_SOCKET, SO_REUSEADDR, &this->optv, sizeof(this->optv));
 
-    check_bind_status(bind(this->serverfd, (const sockaddr *)&this->server_address, this->adr_len)); // istenilen soketi, verilen adrese bağlıyor. BU kadar!
-    check_listen_status(listen(this->serverfd, 5));//Gelen bağlantıları, bekletir. İkinci parametre kaç tane bağlantının beklemesi gerektiğini söyler.
+    checkBindStatus(bind(this->serverfd, (const sockaddr *)&this->server_address, this->adr_len)); // istenilen soketi, verilen adrese bağlıyor. BU kadar!
+    checkListenStatus(listen(this->serverfd, 5));//Gelen bağlantıları, bekletir. İkinci parametre kaç tane bağlantının beklemesi gerektiğini söyler.
 
     std::cout << "Server is listening..." << std::endl;
-    // struct pollfd *fds = new pollfd();
     struct pollfd tmp;
 	this->fds.push_back(tmp);
     this->fds[0].fd = this->serverfd;
     this->fds[0].events = POLLIN;
     while(1)
     {
-        int poll_status = poll(&(this->fds[0]), this->fds.size(), -1);// Süresiz bekleyin
-        if (poll_status == -1) {
-            perror("Poll error");
-            exit(EXIT_FAILURE);
-        }
-        if (this->fds[0].revents & POLLIN) {
-            socklen_t len = sizeof(client_address);
-            check_accept_status(accept(serverfd, (sockaddr *)&client_address, &len));
-            Client tmp;
-            tmp.setInformation(1);
-            tmp.setSocket(this->acc_val);
-            unsigned long clientAddr = ntohl(client_address.sin_addr.s_addr);
-            std::string clientIP = std::to_string((clientAddr >> 24) & 0xFF) + "." + std::to_string((clientAddr >> 16) & 0xFF) + "." + std::to_string((clientAddr >> 8) & 0xFF) + "." + std::to_string(clientAddr & 0xFF);
-            tmp.setRealIp(clientIP);
-            this->clients.push_back(tmp);
-            struct pollfd tmp2;
-			this->fds.push_back(tmp2);
-			this->fds.at(this->fds.size() - 1).fd = this->acc_val;
-			this->fds.at(this->fds.size() - 1).events = POLLIN;
-
-        }
+        checkPollStatus(poll(&(this->fds[0]), this->fds.size(), -1));// Süresiz bekleyin
+        userAccept();
         for (size_t i = 1; i < this->fds.size(); i++)
         {
             if (this->fds[i].fd != -1 && this->fds[i].revents & POLLIN) {

@@ -1,5 +1,14 @@
 #include "Client.hpp"
 
+Client::Client(int fd)
+{
+    this->usrName = "";
+    this->usrNick = "";
+    this->fd = fd;
+    this->isActive = false;
+    this->isLogged = false;
+}
+
 Client::Client()
 {
     this->socketNumber = -1;

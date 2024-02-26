@@ -31,6 +31,10 @@ class Client
         std::string usrSurname;
         std::string usrUser;
         std::string realIp;
+
+        int fd;
+        bool isLogged;
+        bool isActive;
     public:
         Client();
         void operator=(Client const &cpy);
@@ -54,4 +58,5 @@ class Client
         
         //Client(std::string usrPass, std::string usrNick, std::string usrUser, std::string usrIp, std::string usrName, std::string usrSurname);
         ~Client();
+        Client(int fd);
 };
