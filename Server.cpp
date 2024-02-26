@@ -12,6 +12,11 @@ Server::Server(int port, std::string password)
     this->adr_len = sizeof(this->server_address);
 }
 
+int Server::getAccVal()
+{
+    return this->acc_val;
+}
+
 void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw, Client *client)
 {
     std::string line;
@@ -131,7 +136,7 @@ void Server :: checkPollStatus(int poll_status)
     }
 }
 
-void Server :: parseMessage(char *buffer)
+void Server :: parseMessage(char *buffer) // it does not changes the commands out of the function, so it did not be usen for now
 {
     std::string str(buffer);
     if (str.length() == 0)
@@ -155,7 +160,7 @@ void Server :: parseMessage(char *buffer)
     str.clear();
 }
 
-void Server :: executeCommands(int fd)
+void Server :: executeCommands(int fd) //we have command class and i think it would be more readable if we seperate them. What do you think?
 {
     Client *client = &this->clients[fd - 1];
 
@@ -188,6 +193,7 @@ int Server :: checkActivation()
 void Server :: serverFunc()
 {
     int recv_val;
+    Command cmd;
     std::vector<std::string> bufferRaw;
 
     this->setServerfd(socket(AF_INET, SOCK_STREAM, 0));
@@ -223,10 +229,11 @@ void Server :: serverFunc()
                 }
                 else
                 {
+                    // pieceByPiece(buff, bufferRaw, &this->clients[i - 1]); //bufferRaw keeps the commandlines with their options, not only commands
+                    // cmd.commandCntl(bufferRaw.back(), this->acc_val);
                     parseMessage(buff);
                     executeCommands(i);
-                    //pieceByPiece(buff, bufferRaw, &this->clients[i - 1]);
-                    std::cout << "client message: " << buff << std::endl;
+                    // std::cout << "client message: " << buff << std::endl;
                 }
             
             }
