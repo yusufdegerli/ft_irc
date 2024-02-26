@@ -21,6 +21,7 @@ class Client
     private:
         int socketNumber;
         std::string hostName;
+        int information;
         std::string uId;
 
         std::string usrPass;
@@ -46,8 +47,10 @@ class Client
         void setUsrSurname(const std::string &usrSurname);
         void setUsrUser(const std::string &usrUser);
         void setRealIp(const std::string &realIp);
+        void setInformation(const int &information);
         
         std::string &getRealIp()const;
+        int getInformation()const;
         
         //Client(std::string usrPass, std::string usrNick, std::string usrUser, std::string usrIp, std::string usrName, std::string usrSurname);
         ~Client();

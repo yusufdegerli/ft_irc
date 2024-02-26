@@ -12,10 +12,10 @@ Server::Server(int port, std::string password)
     this->adr_len = sizeof(this->server_address);
 }
 
-void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw, Client New)
+void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw, Client *New)
 {
-    static int information = 1;
     std::string line;
+
     std::string lastName;
     std::string name;
     std::string ip;
@@ -23,36 +23,35 @@ void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw, Client New)
     std::string user;
     std::string lastStr = "";
     std::istringstream buffer(buff);
-
     while(std::getline(buffer, line, '\n'))
     {
         bufferRaw.push_back(line);
     }   
     std::string passwd = bufferRaw[0].substr(6, bufferRaw[0].size() -1);
-    if (information == 2)
+    if (New->getInformation() == 2)
     {
-        New.setUsrNick(bufferRaw[1].substr(5, bufferRaw[1].size() -1));
+        New->setUsrNick(bufferRaw[1].substr(5, bufferRaw[1].size() -1));
         lastStr = bufferRaw[2];
         lastName = strrchr(lastStr.c_str(), ' ');
-        New.setUsrSurname(lastName.erase(0,1));
+        New->setUsrSurname(lastName.erase(0,1));
         len = lastStr.size() - lastName.size();
         int i = len;
         while(!isdigit(lastStr.c_str()[i]))
             i--;
-        New.setUsrName(lastStr.substr(i + 1, len - i - 1));
+        New->setUsrName(lastStr.substr(i + 1, len - i - 1));
         int index = lastStr.find(':');
         index -= 2;
         len -= index;
         while(lastStr.c_str()[index] != ' ')
             index--;
-        New.setHostname(lastStr.substr(index + 1, len - index));
+        New->setHostname(lastStr.substr(index + 1, len - index));
         index--;
         while(lastStr.c_str()[index] != ' ')
             index--;
-        New.setUsrUser(lastStr.substr(5, index - 5));
+        New->setUsrUser(lastStr.substr(5, index - 5));
         //Client kullanici(passwd, nick, user, ip, name, lastName.erase(0, 1));
     }
-    information++;
+    New->setInformation(New->getInformation() + 1);
 }
 
 void Server :: setServerfd(int server_fd)
@@ -124,12 +123,12 @@ void Server :: serverFunc()
             socklen_t len = sizeof(client_address);
             check_accept_status(accept(serverfd, (sockaddr *)&client_address, &len));
             Client tmp;
+            tmp.setInformation(1);
             tmp.setSocket(this->acc_val);
             unsigned long clientAddr = ntohl(client_address.sin_addr.s_addr);
             std::string clientIP = std::to_string((clientAddr >> 24) & 0xFF) + "." + std::to_string((clientAddr >> 16) & 0xFF) + "." + std::to_string((clientAddr >> 8) & 0xFF) + "." + std::to_string(clientAddr & 0xFF);
             tmp.setRealIp(clientIP);
             this->clients.push_back(tmp);
-            std::cout << "aaaaa" << std::endl;
             struct pollfd tmp2;
 			this->fds.push_back(tmp2);
 			this->fds.at(this->fds.size() - 1).fd = this->acc_val;
@@ -150,7 +149,8 @@ void Server :: serverFunc()
                 else
                 {
                     //int j = 0;
-                    pieceByPiece(buff, bufferRaw, this->clients[i]);
+                    std::cout << this->clients[i - 1].getInformation() << std::endl;
+                    pieceByPiece(buff, bufferRaw, &this->clients[i - 1]);
                     std::cout << "client message: " << buff << std::endl;
                 }
             

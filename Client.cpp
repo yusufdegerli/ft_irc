@@ -6,6 +6,7 @@ Client::Client()
     this->uId = -1;
     this->usrIp = -1;
     this->realIp = -1;
+    this->information = 1;
 
     this->usrName = "";
     this->usrNick = "";
@@ -15,7 +16,7 @@ Client::Client()
     this->hostName = "";
 }
 
-Client::Client(Client const &cpy)
+Client::Client(Client const &cpy) : information(cpy.information)
 {
     this->socketNumber = cpy.socketNumber;
     this->uId = cpy.uId;
@@ -109,5 +110,12 @@ void Client::setRealIp(const std::string &realIp)
     this->realIp = realIp;
     std::cout << "user ip: " << this->realIp << std::endl;
 }
+
+void Client::setInformation(const int &information)
+{
+    this->information = information;
+}
+
+int Client::getInformation()const{return this->information;}
 
 Client::~Client(){}
