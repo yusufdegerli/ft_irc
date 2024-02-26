@@ -59,7 +59,6 @@ class Server
         void PASS(Client &client);
         void NICK(Client &client);
         void USER(Client &client);
-        int checkActivation();
+        int checkActivation(Client &client);
 };
-//void serverFunc();
 void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw);

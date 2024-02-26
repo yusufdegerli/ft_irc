@@ -70,35 +70,6 @@ void Server :: setServerfd(int server_fd)
     }
 }
 
-void Server :: checkBindStatus(int bind_val)
-{
-    if (bind_val == -1)
-    {
-        std::cerr << "bind error" << std::endl;
-        exit(1);
-    }
-}
-
-void Server :: checkListenStatus(int list_val)
-{
-    if (list_val == -1)
-    {
-        std::cerr << "listen error" << std::endl;
-        exit(1);
-    }
-}
-
-void Server :: checkAcceptStatus(int accept_val)
-{
-    if (accept_val == -1)
-    {
-        std::cerr << "accept error" << std::endl;
-        exit(1);
-    }
-
-    this->acc_val = accept_val;
-}
-
 void Server :: userAccept()
 {
     struct pollfd connect;
@@ -125,69 +96,6 @@ void Server :: userAccept()
         connect.events = POLLIN;
         this->fds.push_back(connect);
     }
-}
-
-void Server :: checkPollStatus(int poll_status)
-{
-    if (poll_status == -1) 
-    {
-        perror("Poll error");
-        exit(EXIT_FAILURE);
-    }
-}
-
-void Server :: parseMessage(char *buffer) // it does not changes the commands out of the function, so it did not be usen for now
-{
-    std::string str(buffer);
-    if (str.length() == 0)
-        return ;
-    for (size_t i = 0; i < str.length(); i++)
-    {
-        if (str[i] >= 9 && str[i] <= 13)
-            str[i] = ' ';
-    }
-
-    std::string comm;
-    std::istringstream buff(str);
-    this->commands.clear();
-
-    while (std::getline(buff, comm, ' '))
-    {
-        if (comm.length() > 0)
-            this->commands.push_back(comm);
-    }
-
-    str.clear();
-}
-
-void Server :: executeCommands(int fd) //we have command class and i think it would be more readable if we seperate them. What do you think?
-{
-    Client *client = &this->clients[fd - 1];
-
-    void (Server::*cmds[])(Client &client) = {&Server::PASS, &Server::NICK, &Server::USER};
-    std::string commands[] = {"PASS", "NICK", "USER"};
-    size_t i;
-
-    if (this->commands.size() == 0)
-        return ;
-    for (i = 0; i < 3; i++)
-    {
-        if (this->commands[0] == commands[i])
-        {
-            (this->*(cmds[i]))(*client);
-            break;
-        }
-    }
-    if (i == 3)
-    {
-        client->print("Command wasn't found\n");
-    }
-}
-
-int Server :: checkActivation()
-{
-    std::cout << "check activation for other functions" << std::endl;
-    return 1;
 }
 
 void Server :: serverFunc()
@@ -233,9 +141,7 @@ void Server :: serverFunc()
                     // cmd.commandCntl(bufferRaw.back(), this->acc_val);
                     parseMessage(buff);
                     executeCommands(i);
-                    // std::cout << "client message: " << buff << std::endl;
                 }
-            
             }
         }
 

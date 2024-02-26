@@ -4,7 +4,7 @@ FLAGS = -Wall -Werror -Wextra -std=c++98
 
 NAME = ircserv
 
-SRC = main.cpp Server.cpp Client.cpp Command.cpp
+SRC = main.cpp Server.cpp Client.cpp Command.cpp Message.cpp Commands/Nick.cpp Commands/User.cpp Commands/Pass.cpp checkStatus.cpp
 
 OBJ = $(SRC:.cpp=.o)
 
