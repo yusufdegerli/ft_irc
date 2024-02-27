@@ -12,9 +12,10 @@ Server::Server(int port, std::string password)
     this->adr_len = sizeof(this->server_address);
 }
 
-void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw, Client *client)
+/* void pieceByPiece(char *buff, std::vector<std::string> &commands, Client *client)
 {
     std::string line;
+    (void)buff;
 
     std::string lastName;
     std::string name;
@@ -22,16 +23,16 @@ void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw, Client *clien
     size_t len;
     std::string user;
     std::string lastStr = "";
-    std::istringstream buffer(buff);
-    while(std::getline(buffer, line, '\n'))
+    // std::istringstream buffer(buff);
+    // while(std::getline(buffer, line, '\n'))
+    // {
+    //     bufferRaw.push_back(line);
+    // }
+    if (client->getInformation() == 2 && commands.empty())
     {
-        bufferRaw.push_back(line);
-    }   
-    if (client->getInformation() == 2 && bufferRaw.empty())
-    {
-        client->setUsrPass(bufferRaw[0].substr(6, bufferRaw[0].size() -1));
-        client->setUsrNick(bufferRaw[1].substr(5, bufferRaw[1].size() -1));
-        lastStr = bufferRaw[2];
+        client->setUsrPass(commands[0].substr(6, commands[0].size() -1));
+        client->setUsrNick(commands[1].substr(5, commands[1].size() -1));
+        lastStr = commands[2];
         lastName = strrchr(lastStr.c_str(), ' ');
         client->setUsrSurname(lastName.erase(0,1));
         len = lastStr.size() - lastName.size();
@@ -48,12 +49,12 @@ void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw, Client *clien
         index--;
         while(lastStr.c_str()[index] != ' ')
             index--;
-        client->setUsrUser(lastStr.substr(5, index - 5));
+        //client->setUsrUser(lastStr.substr(5, index - 5));
         //Client kullanici(passwd, nick, user, ip, name, lastName.erase(0, 1));
     }
     client->setInformation(client->getInformation() + 1);
 }
-
+ */
 
 void Server :: userAccept()
 {
@@ -98,7 +99,6 @@ void Server :: start()
 
 void Server :: serverFunc()
 {
-    Command cmd;
     std::vector<std::string> bufferRaw;
 
     this->start();
@@ -113,6 +113,7 @@ void Server :: serverFunc()
                 char buff[1024] = {0}; // her recv fonksiyonu çalıştığında saçma sapan, ascii dışında karakterler geliyor. Böyle yaparak bunu önlüyorum.
                 if (checkRecvStatus(recv(this->fds[i].fd, buff, sizeof(buff), 0), i) == 1)
                 {
+                    std::cout << "client message: " << buff << std::endl;
                     // pieceByPiece(buff, bufferRaw, &this->clients[i - 1]); //bufferRaw keeps the commandlines with their options, not only commands
                     // cmd.commandCntl(bufferRaw.back(), this->acc_val);
                     parseMessage(buff);
@@ -125,5 +126,7 @@ void Server :: serverFunc()
     close(this->acc_val);
     close(this->serverfd);
 }
+
+void    Server::addToChannels(Channel const &New){ this->channels.push_back(New);}
 
 Server::~Server(){}

@@ -40,6 +40,20 @@ Client::Client(Client const &cpy) : information(cpy.information)
     this->hostName = cpy.hostName;
 }
 
+void    Client::operator=(Client const &cpy)
+{
+    this->socketNumber = cpy.socketNumber;
+    this->uId = cpy.uId;
+    this->usrIp = cpy.usrIp;
+    this->realIp = cpy.realIp;
+    this->usrName = cpy.usrName;
+    this->usrNick = cpy.usrNick;
+    this->usrPass = cpy.usrPass;
+    this->usrSurname = cpy.usrSurname;
+    this->usrUser = cpy.usrUser;
+    this->hostName = cpy.hostName;
+}
+
 /* Client::Client(int hostName, std::string uId)
 {
     this->hostName = hostName;
@@ -111,7 +125,7 @@ void Client::setUsrSurname(const std::string &usrSurname)
     std::cout << "user surname: " << this->usrSurname << std::endl;
 }
 
-void Client::setUsrUser(const std::string &usrUser)
+void Client::setUsername(const std::string &usrUser)
 {
     this->usrUser = usrUser;
     std::cout << "user: " << this->usrUser << std::endl;

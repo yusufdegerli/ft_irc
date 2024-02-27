@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-void Server :: parseMessage(char *buffer) // it does not changes the commands out of the function, so it did not be usen for now
+void Server :: parseMessage(char *buffer)
 {
     std::string str(buffer);
     if (str.length() == 0)
@@ -24,17 +24,17 @@ void Server :: parseMessage(char *buffer) // it does not changes the commands ou
     str.clear();
 }
 
-void Server :: executeCommands(int fd) //we have command class and i think it would be more readable if we seperate them. What do you think?
+void Server :: executeCommands(int fd)
 {
     Client *client = &this->clients[fd - 1];
 
-    void (Server::*cmds[])(Client &client) = {&Server::PASS, &Server::NICK, &Server::USER};
-    std::string commands[] = {"PASS", "NICK", "USER"};
+    void (Server::*cmds[])(Client &client) = {&Server::PASS, &Server::NICK, &Server::USER, &Server::JOIN, &Server::QUIT};
+    std::string commands[] = {"PASS", "NICK", "USER", "JOIN", "QUIT"};
     size_t i;
 
     if (this->commands.size() == 0)
         return ;
-    for (i = 0; i < 3; i++)
+    for (i = 0; i < 5; i++)
     {
         if (this->commands[0] == commands[i]) // check activation for all functions
         {
@@ -42,7 +42,7 @@ void Server :: executeCommands(int fd) //we have command class and i think it wo
             break;
         }
     }
-    if (i == 3)
+    if (i == 5)
     {
         client->print("Command wasn't found\n");
     }

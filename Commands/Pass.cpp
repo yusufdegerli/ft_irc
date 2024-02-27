@@ -15,7 +15,10 @@ void Server :: PASS(Client &client)
     }
 
     if (this->password == this->commands[1])
+    {
+        client.setUsrPass(commands[1].substr(1, commands[1].size() -1)); //keep the password
         client.setLoggin();
+    }
     else
         client.print("Wrong password. Try again\n");
 }

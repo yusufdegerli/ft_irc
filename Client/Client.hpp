@@ -49,7 +49,7 @@ class Client
         void setUsrIp(const std::string &usrIp);
         void setUsrName(const std::string &usrName);
         void setUsrSurname(const std::string &usrSurname);
-        void setUsrUser(const std::string &usrUser);
+        void setUsername(const std::string &usrUser);
         void setRealIp(const std::string &realIp);
         void setInformation(const int &information);
         
