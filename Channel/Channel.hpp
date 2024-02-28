@@ -20,9 +20,12 @@ class Channel{
     private:
         std::string topic;
         std::string name;
+        std::vector<Client> Operators;
         std::vector<Client> members;
         std::string key;
         bool key_required;
+        bool invite_only;
+
     public:
         Channel();
         Channel(std::string const &name);
@@ -30,10 +33,13 @@ class Channel{
         void    operator=(Channel const &New);
         ~Channel();
         
+        void    addToOperators(Client const &New);
         void    addToMembers(Client const &New);
 
         std::string getName(void);
         std::vector<Client> getMembers(void);
+        std::vector<Client> getOperators(void);
         std::string getKey(void);
         bool getKeyRequired();
+        bool getInviteOnly();
 };

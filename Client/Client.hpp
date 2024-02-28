@@ -55,7 +55,7 @@ class Client
         void setFd(int fd);
         void setLoggin();
         
-        std::string &getRealIp()const;
+        std::string &getRealIp();
         int getInformation()const;
         
         //Client(std::string usrPass, std::string usrNick, std::string usrUser, std::string usrIp, std::string usrName, std::string usrSurname);

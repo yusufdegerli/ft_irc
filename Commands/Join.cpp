@@ -2,9 +2,6 @@
 
 void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,<key>}]
 {
-    if (checkActivation(client) == -1)
-        return ;
-
     std::vector<Channel>  *channel = &this->channels;
 
     std::string channels = this->commands[1];
@@ -15,18 +12,15 @@ void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,
         client.print(client.getNick() + " JOIN :Not enough parameters" + "\r\n"); // 461
         return ;
     }
-
     std::vector<std::string> channel_list;
     size_t index = channels.find(',');
     size_t start = 0;
-
     while (index != std::string::npos)
     {
         channel_list.push_back(channels.substr(start, index - start));
         start = index + 1;
         index = channels.find(',', start);
     }
-    
     channel_list.push_back(channels.substr(start));
 
     std::vector<std::string> key_list;
@@ -48,7 +42,7 @@ void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,
         {
             if (channel_list[k] == (*channel)[j].getName())
             {
-                if ((key_list.empty() && (*channel)[j].getKeyRequired()) || (key_list[k] != (*channel)[j].getKey())) //kontrol et
+                if ((key_list.empty() && (*channel)[j].getKeyRequired()) || (key_list[k] != (*channel)[j].getKey())) //kontrol et *key_list.empty()*
                 {
                     client.print(client.getNick() + " " + (*channel)[j].getName() + " :Cannot join channel (+k)" + "\r\n"); // kodu 475
                     return ;
@@ -63,8 +57,9 @@ void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,
                     }
                     if (i == (*channel)[j].getMembers().size())
                     {
+                        //The topic is a line shown to all users when they join the channel
                         (*channel)[j].addToMembers(client);
-                        client.print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getHostname() + " JOIN " + (*channel)[j].getName() + "\r\n");
+                        client.print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " JOIN " + (*channel)[j].getName() + "\r\n");
                     }
                     break ;
                 }
@@ -72,9 +67,11 @@ void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,
         }
         if (j == channel->size())
         {
+            //The topic is a line shown to all users when they join the channel
             this->addToChannels(Channel(channel_list[k]));
             (*channel)[j].addToMembers(client);
-            client.print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getHostname() + " JOIN " + (*channel)[j].getName() + "\r\n");
+            (*channel)[j].addToOperators(client);
+            client.print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " JOIN " + (*channel)[j].getName() + "\r\n");
         }
     }
     //check if the client can join the channel

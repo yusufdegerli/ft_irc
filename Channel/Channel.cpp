@@ -24,12 +24,18 @@ Channel::Channel(Channel const &cpy)
 
 Channel::~Channel(){}
 
+
+
+
 std::string Channel::getName(){return this->name;}
 
 std::vector<Client> Channel::getMembers(){return this->members;}
+std::vector<Client> Channel::getOperators(){return this->Operators;}
 
 bool Channel::getKeyRequired(){return this->key_required;}
+bool Channel::getInviteOnly(){return this->invite_only;}
 
 std::string Channel::getKey(void){return this->key;}
 
 void Channel::addToMembers(Client const &New){ this->members.push_back(New);}
+void Channel::addToOperators(Client const &New){ this->Operators.push_back(New);}

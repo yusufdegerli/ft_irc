@@ -83,6 +83,12 @@ void Client::setSocket(const int socket)
     this->socketNumber = socket;
 }
 
+void Client::setHostname(const std::string &hostname)
+{
+    this->hostName = hostname;
+    std::cout << "user host: " << this->hostName << std::endl;
+}
+
 void Client::setuId(const std::string &uId)
 {
     this->uId = uId;
@@ -106,17 +112,10 @@ void Client::setUsrIp(const std::string &usrIp)
     this->usrIp = usrIp;
 }
 
-void Client::setHostname(const std::string &hostname)
-{
-    this->hostName = hostname;
-    std::cout << "user host: " << this->hostName << std::endl;
-}
-
 void Client::setUsrName(const std::string &usrName)
 {
     this->usrName = usrName;
-    this->usrUser = usrName;
-    std::cout << "Client " << this->socketNumber << " set real name: " << this->usrName <<std::endl;
+    std::cout << "Client " << this->socketNumber << " set nickname: " << this->usrName <<std::endl;
     this->print("Real name: " + this->usrName + "\n");
 }
 
@@ -199,3 +198,5 @@ std::string Client :: getHostname()
 {
     return this->hostName;
 }
+
+std::string &Client::getRealIp() {return this->realIp;}

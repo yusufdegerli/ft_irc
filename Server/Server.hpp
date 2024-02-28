@@ -60,9 +60,11 @@ class Server
         void PASS(Client &client);
         void NICK(Client &client);
         void USER(Client &client);
+        void WHO(Client &client);
 
+        //OPER ve BAN'a gerek yoktu. sildim. INVITE ekledim.
         void JOIN(Client &client);
-        void commandOper(std::string commandline, int acc_val);         //Bir kullanıcıya operatör olarak izin veriyorsun
+        void INVITE(Client &client);
 
         void QUIT(Client &client);         //Kullanıcının sunucudan bağlantısının kopması
         void commandWho(std::string commandline, int acc_val);          //Kanaldaki kişileri listeleme
@@ -73,7 +75,6 @@ class Server
         void commandPart(std::string commandline, int acc_val);         //Bir kanaldan çıkmaya yarıyor
         void commandTopic(std::string commandline, int acc_val);        //Kanalın ismini/konusunu değiştirme
         void commandKick(std::string commandline, int acc_val);         //Kişiyi, kanaldan/server'dan atma
-        void commandBan(std::string commandline, int acc_val);          //Kişiyi, kanaldan/server'dan yasaklama
 
         int checkActivation(Client &client);
         void start();
