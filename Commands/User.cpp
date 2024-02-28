@@ -25,6 +25,8 @@ void Server :: USER(Client &client)
         return ;
     }
 
-    client.setUsername(this->commands[1]);
-    client.setHostname(this->commands[3]);
+    client.setUsrName(this->commands[1]);
+
+    // client.setUsername(this->commands[1]);
+    // client.setHostname(this->commands[3]); // nothing is passed as 4th str
 }
