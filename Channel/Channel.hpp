@@ -21,6 +21,7 @@ class Channel{
         std::string topic;
         std::string name;
         std::vector<Client> members;
+        std::string key;
         bool key_required;
     public:
         Channel();
@@ -32,5 +33,7 @@ class Channel{
         void    addToMembers(Client const &New);
 
         std::string getName(void);
-
+        std::vector<Client> getMembers(void);
+        std::string getKey(void);
+        bool getKeyRequired();
 };

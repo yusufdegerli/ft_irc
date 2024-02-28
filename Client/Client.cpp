@@ -188,3 +188,13 @@ std::string Client :: getName()
 {
     return this->usrName;
 }
+
+std::string Client :: getUsername()
+{
+    return this->usrUser;
+}
+
+std::string Client :: getHostname()
+{
+    return this->hostName;
+}

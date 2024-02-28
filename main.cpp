@@ -9,7 +9,7 @@ int main(int ac, char **av)
     }
     else
     {
-        Server serv(atoi(av[1]), av[2]);
+        Server serv(atoi(av[1]), av[2]); //there is server password
         serv.serverFunc();
     }
     return 0;

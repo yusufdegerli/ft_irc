@@ -26,4 +26,10 @@ Channel::~Channel(){}
 
 std::string Channel::getName(){return this->name;}
 
-void    Channel::addToMembers(Client const &New){ this->members.push_back(New);}
+std::vector<Client> Channel::getMembers(){return this->members;}
+
+bool Channel::getKeyRequired(){return this->key_required;}
+
+std::string Channel::getKey(void){return this->key;}
+
+void Channel::addToMembers(Client const &New){ this->members.push_back(New);}

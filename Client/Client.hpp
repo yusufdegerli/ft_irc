@@ -52,6 +52,8 @@ class Client
         void setUsername(const std::string &usrUser);
         void setRealIp(const std::string &realIp);
         void setInformation(const int &information);
+        void setFd(int fd);
+        void setLoggin();
         
         std::string &getRealIp()const;
         int getInformation()const;
@@ -59,12 +61,13 @@ class Client
         //Client(std::string usrPass, std::string usrNick, std::string usrUser, std::string usrIp, std::string usrName, std::string usrSurname);
         ~Client();
         Client(int fd);
-        void setLoggin();
-        int getFd();
-        void setFd(int fd);
-        int getSocket();
         bool getLoggedStatus();
         void print(std::string str);
+        
+        int getFd();
+        int getSocket();
         std::string getNick();
         std::string getName();
+        std::string getUsername();
+        std::string getHostname();
 };
