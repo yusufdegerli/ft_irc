@@ -60,14 +60,12 @@ class Server
         void PASS(Client &client);
         void NICK(Client &client);
         void USER(Client &client);
-        void WHO(Client &client);
 
-        //OPER ve BAN'a gerek yoktu. sildim. INVITE ekledim.
         void JOIN(Client &client);
         void INVITE(Client &client);
 
         void QUIT(Client &client);         //Kullanıcının sunucudan bağlantısının kopması
-        void commandWho(std::string commandline, int acc_val);          //Kanaldaki kişileri listeleme
+        void WHO(Client &client);
         void commandList(std::string commandline, int acc_val);         //kanalları konularıyla birlikte liseteleme
         
         void commandPrivmsg(std::string commandline, int acc_val);      //Kişiye/Kanala özel mesaj atma        

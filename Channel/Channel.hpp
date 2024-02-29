@@ -42,4 +42,6 @@ class Channel{
         std::string getKey(void);
         bool getKeyRequired();
         bool getInviteOnly();
+
+        //void writeMembersByName(std::vector<Client> members);
 };

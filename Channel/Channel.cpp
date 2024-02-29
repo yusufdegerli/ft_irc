@@ -39,3 +39,13 @@ std::string Channel::getKey(void){return this->key;}
 
 void Channel::addToMembers(Client const &New){ this->members.push_back(New);}
 void Channel::addToOperators(Client const &New){ this->Operators.push_back(New);}
+
+
+/* void Channel::writeMembersByName(std::vector<Client> members)
+{
+    std::cout << "üst\n";
+    std::cout << "size: " << members.size() << std::endl;
+    for (size_t m = 0; m < members.size(); m++)
+        std::cout << members[m].getName() << std::endl;
+    std::cout << "alt\n";
+} */

@@ -42,7 +42,7 @@ void Server :: executeCommands(int fd)
             break;
         }
     }
-    if (i == 6)
+    if (i == 7)
     {
         client->print("Command wasn't found\n");
     }
