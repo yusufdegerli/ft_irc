@@ -28,13 +28,13 @@ void Server :: executeCommands(int fd)
 {
     Client *client = &this->clients[fd - 1];
 
-    void (Server::*cmds[])(Client &client) = {&Server::PASS, &Server::NICK, &Server::USER, &Server::JOIN, &Server::QUIT, &Server::INVITE, &Server::WHO};
-    std::string commands[] = {"PASS", "NICK", "USER", "JOIN", "QUIT", "INVITE", "WHO"};
+    void (Server::*cmds[])(Client &client) = {&Server::PASS, &Server::NICK, &Server::USER, &Server::JOIN, &Server::QUIT, &Server::INVITE, &Server::WHO, &Server::PRIVMSG};
+    std::string commands[] = {"PASS", "NICK", "USER", "JOIN", "QUIT", "INVITE", "WHO", "PRIVMSG"};
     size_t i;
 
     if (this->commands.size() == 0)
         return ;
-    for (i = 0; i < 7; i++)
+    for (i = 0; i < 8; i++)
     {
         if (this->commands[0] == commands[i]) // check activation for all functions
         {
@@ -42,7 +42,7 @@ void Server :: executeCommands(int fd)
             break;
         }
     }
-    if (i == 7)
+    if (i == 8)
     {
         client->print("Command wasn't found\n");
     }

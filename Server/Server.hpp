@@ -66,6 +66,7 @@ class Server
 
         void QUIT(Client &client);         //Kullanıcının sunucudan bağlantısının kopması
         void WHO(Client &client);
+        void PRIVMSG(Client &client);
         void commandList(std::string commandline, int acc_val);         //kanalları konularıyla birlikte liseteleme
         
         void commandPrivmsg(std::string commandline, int acc_val);      //Kişiye/Kanala özel mesaj atma        
