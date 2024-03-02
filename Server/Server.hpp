@@ -70,8 +70,8 @@ class Server
         void QUIT(Client &client);         //Kullanıcının sunucudan bağlantısının kopması
         void WHO(Client &client);
         void PRIVMSG(Client &client);
+        void KICK(Client &client);       //Kişiyi, kanaldan/server'dan atma
         void List(std::string commandline, int acc_val);         //kanalları konularıyla birlikte liseteleme
-        void Kick(std::string commandline, int acc_val);         //Kişiyi, kanaldan/server'dan atma
         
 
         int checkActivation(Client &client);
