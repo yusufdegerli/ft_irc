@@ -81,6 +81,11 @@ class Server
 
         void    addToChannels(Channel const &New);
 
+        bool findChannel(std::string channel);
+        size_t returnChannelIndex(std::string channel);
+        void addToChannel(Channel &chan, Client &client);
+
+
 };
 
 void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw);

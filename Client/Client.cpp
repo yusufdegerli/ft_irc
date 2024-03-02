@@ -179,7 +179,7 @@ void Client :: print(std::string str)
     // std::cout << str << std::endl;
 }
 
-std::string Client :: getNick()
+std::string Client :: getNick() const
 {
     return this->usrNick;
 }

@@ -28,7 +28,9 @@ class Channel{
 
     public:
         Channel();
-        Channel(std::string const &name);
+        // Channel(std::string const &name);
+        Channel(std::string name);
+        Channel(std::string name, std::string key);
         Channel(Channel const &New);
         void    operator=(Channel const &New);
         ~Channel();
@@ -42,6 +44,7 @@ class Channel{
         std::string getKey(void);
         bool getKeyRequired();
         bool getInviteOnly();
-
+        bool checkMembers(Client const &New);
+        void printMembers();
         //void writeMembersByName(std::vector<Client> members);
 };

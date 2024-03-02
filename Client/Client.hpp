@@ -66,7 +66,7 @@ class Client
         
         int getFd();
         int getSocket();
-        std::string getNick();
+        std::string getNick() const;
         std::string getName();
         std::string getUsername();
         std::string getHostname();
