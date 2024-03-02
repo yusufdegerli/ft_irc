@@ -127,6 +127,57 @@ void Server :: serverFunc()
     close(this->serverfd);
 }
 
-void    Server::addToChannels(Channel const &New){ this->channels.push_back(New);}
+bool Server :: findChannel(std::string channel)
+{
+    for (size_t i = 0; i < this->channels.size(); i++)
+    {
+        if (this->channels[i].getName() == channel)
+            return true;
+    }
+
+    return false;
+}
+
+size_t Server :: returnChannelIndex(std::string channel)
+{
+    size_t i = 0;
+
+    for (; i < this->channels.size(); i++)
+    {
+        if (this->channels[i].getName() == channel)
+            return i;
+    }
+
+    return i;
+}
+
+void Server :: addToChannel(Channel &chan, Client &client)
+{
+    std::string symbol;
+    std::string prefix;
+
+    if (chan.checkMembers(client) == false)
+    {
+        chan.addToMembers(client);
+        for (size_t m = 0; m < chan.getMembers().size(); m++)
+            chan.getMembers()[m].print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " JOIN " + chan.getName() + "\r\n");
+        if (chan.getTopic() != "")
+            client.print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " " + client.getNick() + " " + chan.getName() + " :" + chan.getTopic());
+        chan.getSecretChan() ? symbol = "@" : symbol = "=";
+        client.print(symbol + " " + chan.getName() + " :");
+        chan.checkOperators(client) ? prefix = "@" : prefix = "v";
+        client.print(prefix + client.getNick());
+        for (size_t m = 0; m < chan.getMembers().size() - 1; m++)
+        {
+            client.print(" ");
+            chan.checkOperators(chan.getMembers()[m]) ? prefix = "@" : prefix = "v";
+            client.print(prefix + chan.getMembers()[m].getNick());
+        }
+        client.print("\r\n");
+        client.print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " " + client.getNick() + " " + chan.getName() + " :End of /NAMES list\r\n");
+    }
+    else
+        client.print("You are already in the channel " + chan.getName() + "\r\n");
+}
 
 Server::~Server(){}

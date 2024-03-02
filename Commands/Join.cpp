@@ -18,46 +18,8 @@ std::vector<std::string> create_list(std::string str)
     return(new_list);
 }
 
-bool Server :: findChannel(std::string channel)
-{
-    for (size_t i = 0; i < this->channels.size(); i++)
-    {
-        if (this->channels[i].getName() == channel)
-            return true;
-    }
-
-    return false;
-}
-
-size_t Server :: returnChannelIndex(std::string channel)
-{
-    size_t i = 0;
-
-    for (; i < this->channels.size(); i++)
-    {
-        if (this->channels[i].getName() == channel)
-            return i;
-    }
-
-    return i;
-}
-
-void Server :: addToChannel(Channel &chan, Client &client)
-{
-    if (chan.checkMembers(client) == false)
-    {
-        client.print("You entered the channel " + chan.getName() + "\n");
-        chan.addToMembers(client);
-    }
-    else
-        client.print("You are already in the channel " + chan.getName() + "\n");
-}
-
-
 void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,<key>}]
 {
-    // std::vector<Channel>  *channel = &this->channels;
-
     std::string channels = this->commands[1];
     std::string keys = this->commands[2];
 
@@ -75,7 +37,12 @@ void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,
 
     for (size_t i = 0; i < channel_list.size(); i++)
     {
-        if (this->findChannel(channel_list[i]))
+        if(channel_list[i][0] != '#')
+        {
+            client.print("JOIN: There is no # in the first character.\n");
+            return ;
+        }
+        if (this->findChannel(channel_list[i])) //channel var
         {
             Channel &chan = this->channels[returnChannelIndex(channel_list[i])];
             std::cout << "key requeru " << chan.getKeyRequired() << std::endl;
@@ -86,13 +53,13 @@ void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,
                     this->addToChannel(chan, client);
                 else
                 {
-                    client.print("Enter the key to join channel " + chan.getName() + "\n");
+                    client.print(client.getNick() + " " + chan.getName() + " :Cannot join channel (+k)" + "\r\n"); // kodu 475
                 }
             }
             else
                 this->addToChannel(chan, client);
         }
-        else
+        else //yok
         {
             std::cout << "create channel, key list = '" << key_list[i] << "' and i = " << i << std::endl;
             if (key_list[i] != "")
@@ -115,6 +82,7 @@ void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,
                 client.print("You created channel: " + channel_list[i] + "\n");
 
                 Channel &chan1 = this->channels[returnChannelIndex(channel_list[i])];
+                chan1.addToOperators(client);
                 this->addToChannel(chan1, client);
             }
         }

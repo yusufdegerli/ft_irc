@@ -28,6 +28,8 @@ void Server :: USER(Client &client)
         std::time(&rawtime);
         timeinfo = localtime(&rawtime);
         strftime(buffer, 80, "%d-%m-%Y %I:%M:%S", timeinfo);
+        client.setHostname(this->commands[4]);
+        client.setUsername(this->commands[1]);
         //LINE 1
         client.print(":"); client.print(client.getRealIp()); client.print(" 001 "); client.print(client.getNick());
         client.print(" : Welcome to the Internet Relay Network ");client.print(client.getNick());client.print("!");client.print(this->commands[1]);

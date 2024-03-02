@@ -14,13 +14,10 @@ void Server :: NICK(Client &client)
             if(!oldName.empty())
                 client.print(oldName);
             client.print("!");
-            // if(!client.getUsername(this.commands[1]).empty())
             client.print("@");
             client.print(client.getRealIp());
             client.print("\n");
         }
-        // client.print("Nickname is already set\n");
-            // std::cout << "oldName: " << oldName << " nameCnt: " << nameCnt << std::endl;
         nameCnt++;
     }
     if (client.getLoggedStatus() == 0)

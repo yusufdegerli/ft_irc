@@ -60,26 +60,23 @@ class Server
         void PASS(Client &client);
         void NICK(Client &client);
         void USER(Client &client);
+        void Mode(std::string commandline, int acc_val);         //Kişi ve kanallar için, ünvan değiştirme
 
         void JOIN(Client &client);
         void INVITE(Client &client);
+        void PART(Client &client);         //Bir kanaldan çıkmaya yarıyor
+        void TOPIC(Client &client);        //Kanalın ismini/konusunu değiştirme
 
         void QUIT(Client &client);         //Kullanıcının sunucudan bağlantısının kopması
         void WHO(Client &client);
         void PRIVMSG(Client &client);
-        void commandList(std::string commandline, int acc_val);         //kanalları konularıyla birlikte liseteleme
+        void List(std::string commandline, int acc_val);         //kanalları konularıyla birlikte liseteleme
+        void Kick(std::string commandline, int acc_val);         //Kişiyi, kanaldan/server'dan atma
         
-        void commandPrivmsg(std::string commandline, int acc_val);      //Kişiye/Kanala özel mesaj atma        
-        void commandMode(std::string commandline, int acc_val);         //Kişi ve kanallar için, ünvan değiştirme
-        void commandPart(std::string commandline, int acc_val);         //Bir kanaldan çıkmaya yarıyor
-        void commandTopic(std::string commandline, int acc_val);        //Kanalın ismini/konusunu değiştirme
-        void commandKick(std::string commandline, int acc_val);         //Kişiyi, kanaldan/server'dan atma
 
         int checkActivation(Client &client);
         void start();
         int checkRecvStatus(int recv_val, int i);
-
-        void    addToChannels(Channel const &New);
 
         bool findChannel(std::string channel);
         size_t returnChannelIndex(std::string channel);
@@ -88,4 +85,5 @@ class Server
 
 };
 
+std::vector<std::string> create_list(std::string str);
 void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw);

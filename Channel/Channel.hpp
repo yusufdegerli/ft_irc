@@ -25,6 +25,8 @@ class Channel{
         std::string key;
         bool key_required;
         bool invite_only;
+        bool secret_chan;
+        //there is no need for private. they are not used today.
 
     public:
         Channel();
@@ -39,12 +41,15 @@ class Channel{
         void    addToMembers(Client const &New);
 
         std::string getName(void);
-        std::vector<Client> getMembers(void);
-        std::vector<Client> getOperators(void);
-        std::string getKey(void);
+        std::vector<Client> &getMembers(void);
+        std::vector<Client> &getOperators(void);
+        std::string &getKey(void);
+        std::string &getTopic(void);
         bool getKeyRequired();
         bool getInviteOnly();
+        bool getSecretChan();
         bool checkMembers(Client const &New);
+        bool checkOperators(Client const &New);
         void printMembers();
         //void writeMembersByName(std::vector<Client> members);
 };

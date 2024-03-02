@@ -34,11 +34,24 @@ Channel::Channel(std::string name, std::string key)
 
 Channel::Channel(Channel const &cpy)
 {
-    this->key_required = cpy.key_required;
-    this->members = cpy.members;
+     this->topic = cpy.topic;
     this->name = cpy.name;
-    this->topic = cpy.topic;
+    this->Operators = cpy.Operators;
+    this->members = cpy.members;
     this->key = cpy.key;
+    this->key_required = cpy.key_required;
+    this->invite_only = cpy.invite_only;
+}
+
+void    Channel::operator=(Channel const &cpy)
+{
+    this->topic = cpy.topic;
+    this->name = cpy.name;
+    this->Operators = cpy.Operators;
+    this->members = cpy.members;
+    this->key = cpy.key;
+    this->key_required = cpy.key_required;
+    this->invite_only = cpy.invite_only;
 }
 
 Channel::~Channel(){}
@@ -48,13 +61,15 @@ Channel::~Channel(){}
 
 std::string Channel::getName(){return this->name;}
 
-std::vector<Client> Channel::getMembers(){return this->members;}
-std::vector<Client> Channel::getOperators(){return this->Operators;}
+std::vector<Client> &Channel::getMembers(){return this->members;}
+std::vector<Client> &Channel::getOperators(){return this->Operators;}
 
 bool Channel::getKeyRequired(){return this->key_required;}
 bool Channel::getInviteOnly(){return this->invite_only;}
+bool Channel::getSecretChan(){return this->secret_chan;}
 
-std::string Channel::getKey(void){return this->key;}
+std::string &Channel::getKey(void){return this->key;}
+std::string &Channel::getTopic(void){return this->topic;}
 
 void Channel::addToMembers(Client const &New)
 {
@@ -72,6 +87,18 @@ bool Channel :: checkMembers(Client const &New)
     }
     return false;
 }
+
+bool Channel :: checkOperators(Client const &New)
+{
+    for (size_t i = 0; i < this->Operators.size(); i++)
+    {
+        std::cout << "op: " << this->Operators[i].getNick() << "new: " << New.getNick();
+        if (this->Operators[i].getNick() == New.getNick())
+            return true;
+    }
+    return false;
+}
+
 
 void Channel :: printMembers()
 {
