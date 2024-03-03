@@ -26,7 +26,7 @@ void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,
     std::string channels = this->commands[1];
     std::vector<std::string> key_list;
     std::string keys;
-    if (this->commands.size() != 3)
+    if (this->commands.size() < 3)
     {
         keys = "";
         key_list.push_back("");
@@ -37,7 +37,7 @@ void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,
         key_list = create_list(keys);
     }
 
-    if (this->commands.size() != 2)
+    if (this->commands.size() < 2)
     {
         client.print(":" + client.getRealIp() + " 461 " + client.getNick() + "JOIN : Not enough parameters\r\n");
         return ;
@@ -56,11 +56,13 @@ void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,
         {
             Channel &chan = this->channels[returnChannelIndex(channel_list[i])];
             std::cout << "key requeru " << chan.getKeyRequired() << std::endl;
-            if (chan.getKeyRequired() && !keys.empty())
+            if (chan.getKeyRequired())
             {
-                std::cout << "check keys " << key_list[i] << " and " << chan.getKey() << std::endl;
-                if (key_list[i] == chan.getKey())
-                    this->addToChannel(chan, client);
+                if (!keys.empty())
+                {
+                    if (key_list[i] == chan.getKey())
+                        this->addToChannel(chan, client);
+                }
                 else
                 {
                     client.print(client.getNick() + " " + chan.getName() + " :Cannot join channel (+k)" + "\r\n"); // kodu 475

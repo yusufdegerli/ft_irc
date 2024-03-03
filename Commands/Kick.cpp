@@ -9,7 +9,7 @@ void Server :: KICK(Client &client)
         comment += " ";
     }
     Channel &chan = this->channels[returnChannelIndex(this->commands[1])];
-    if(this->commands.size() != 2 || this->commands.size() != 3)
+    if(this->commands.size() < 2)
     {
         client.print(": " + client.getRealIp() +" 461 " + client.getNick() + "KICK : Not enough parameters\r\n");
         return ;

@@ -107,6 +107,8 @@ void Channel :: printMembers()
     }
 }
 
+void Channel :: setTopic(std::string topic){this->topic = topic;}
+
 /* void Channel::writeMembersByName(std::vector<Client> members)
 {
     std::cout << "üst\n";

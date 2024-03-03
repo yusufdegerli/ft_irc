@@ -51,5 +51,7 @@ class Channel{
         bool checkMembers(Client const &New);
         bool checkOperators(Client const &New);
         void printMembers();
+        
+        void    setTopic(std::string topic);
         //void writeMembersByName(std::vector<Client> members);
 };
