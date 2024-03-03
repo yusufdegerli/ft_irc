@@ -18,6 +18,11 @@ void Server :: USER(Client &client)
         client.print("Set nickname first. Use NICK command\n");
         return ;
     }
+    if(client.getUsername().empty() == false && client.getHostname().empty() == false)
+    {
+        client.print(":" + client.getRealIp() + " 462 " + client.getNick() + "USER : Not enough parameters\n");
+        return ; 
+    }
 
     if (this->commands.size() == 5 && this->commands[2].compare("0") == 0 && this->commands[3].compare("*") == 0)
     {
@@ -50,7 +55,7 @@ void Server :: USER(Client &client)
     }
     else
     {
-        client.print("Wrong arguments\n");
+        client.print(":" + client.getRealIp() + " 461 " + client.getNick() + "USER : Not enough parameters\n");
         return ; 
     }
 

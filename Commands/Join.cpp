@@ -39,7 +39,7 @@ void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,
 
     if (this->commands.size() != 2)
     {
-        client.print(client.getNick() + " JOIN :Not enough parameters" + "\r\n"); // 461
+        client.print(":" + client.getRealIp() + " 461 " + client.getNick() + "JOIN : Not enough parameters\n");
         return ;
     }
     std::vector<std::string> channel_list;

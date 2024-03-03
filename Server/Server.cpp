@@ -138,6 +138,17 @@ bool Server :: findChannel(std::string channel)
     return false;
 }
 
+size_t Server::returnClientIndex(std::string clientNick, Channel &channel)
+{
+    size_t i = 0;
+    for(; i < channel.getMembers().size(); i++)
+    {
+        if(channel.getMembers()[i].getNick() == clientNick)
+            return i;
+    }
+    return i;
+}
+
 size_t Server :: returnChannelIndex(std::string channel)
 {
     size_t i = 0;

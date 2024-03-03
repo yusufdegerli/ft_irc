@@ -79,6 +79,7 @@ class Server
         int checkRecvStatus(int recv_val, int i);
 
         bool findChannel(std::string channel);
+        size_t returnClientIndex(std::string clientNick, Channel &channel);
         size_t returnChannelIndex(std::string channel);
         void addToChannel(Channel &chan, Client &client);
 
