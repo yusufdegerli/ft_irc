@@ -13,27 +13,37 @@ std::vector<std::string> create_list(std::string str)
         start = end + 1;
         end = str.find(',', start);
     }
-    new_list.push_back(str.substr(start));
-
+    if (start != str.length())
+        new_list.push_back(str.substr(start));
+    else
+        new_list.push_back("");
+    std::cout << new_list.back() << std::endl;
     return(new_list);
 }
 
 void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,<key>}]
 {
     std::string channels = this->commands[1];
-    std::string keys = this->commands[2];
+    std::vector<std::string> key_list;
+    std::string keys;
+    if (this->commands.size() != 3)
+    {
+        keys = "";
+        key_list.push_back("");
+    }
+    else
+    {
+        keys = this->commands[2];
+        key_list = create_list(keys);
+    }
 
-    std::cout << client.getNick() << std::endl;
-    if (channels.empty())
+    if (this->commands.size() != 2)
     {
         client.print(client.getNick() + " JOIN :Not enough parameters" + "\r\n"); // 461
         return ;
     }
     std::vector<std::string> channel_list;
     channel_list = create_list(channels);
-
-    std::vector<std::string> key_list;
-    key_list = create_list(keys);
 
     for (size_t i = 0; i < channel_list.size(); i++)
     {
@@ -46,7 +56,7 @@ void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,
         {
             Channel &chan = this->channels[returnChannelIndex(channel_list[i])];
             std::cout << "key requeru " << chan.getKeyRequired() << std::endl;
-            if (chan.getKeyRequired())
+            if (chan.getKeyRequired() && !keys.empty())
             {
                 std::cout << "check keys " << key_list[i] << " and " << chan.getKey() << std::endl;
                 if (key_list[i] == chan.getKey())
@@ -61,7 +71,7 @@ void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,
         }
         else //yok
         {
-            std::cout << "create channel, key list = '" << key_list[i] << "' and i = " << i << std::endl;
+            //std::cout << "create channel, key list = '" << key_list[i] << "' and i = " << i << std::endl;
             if (key_list[i] != "")
             {
                 Channel chan(channel_list[i], key_list[i]);
@@ -71,6 +81,7 @@ void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,
                 client.print("You created channel: " + channel_list[i] + "\n");
 
                 Channel &chan1 = this->channels[returnChannelIndex(channel_list[i])];
+                chan1.addToOperators(client);
                 this->addToChannel(chan1, client);
             }
             else

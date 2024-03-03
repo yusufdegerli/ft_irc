@@ -161,10 +161,12 @@ void Server :: addToChannel(Channel &chan, Client &client)
         chan.addToMembers(client);
         for (size_t m = 0; m < chan.getMembers().size(); m++)
             chan.getMembers()[m].print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " JOIN " + chan.getName() + "\r\n");
+        for (size_t m = 0; m < chan.getMembers().size() - 1; m++)
+            client.print(":" + chan.getMembers()[m].getNick() + "!" + chan.getMembers()[m].getUsername() + '@' + chan.getMembers()[m].getRealIp() + " JOIN " + chan.getName() + "\r\n");
         if (chan.getTopic() != "")
             client.print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " " + client.getNick() + " " + chan.getName() + " :" + chan.getTopic());
         chan.getSecretChan() ? symbol = "@" : symbol = "=";
-        client.print(symbol + " " + chan.getName() + " :");
+        client.print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " " + client.getNick() + " " + symbol + " " + chan.getName()  + " :");
         chan.checkOperators(client) ? prefix = "@" : prefix = "v";
         client.print(prefix + client.getNick());
         for (size_t m = 0; m < chan.getMembers().size() - 1; m++)

@@ -2,5 +2,5 @@
 //KICK <channel> <user> <comment>
 void Server :: KICK(Client &client)
 {
-    ;
+    (void)client;
 }

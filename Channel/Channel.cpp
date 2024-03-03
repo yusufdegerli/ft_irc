@@ -92,7 +92,6 @@ bool Channel :: checkOperators(Client const &New)
 {
     for (size_t i = 0; i < this->Operators.size(); i++)
     {
-        std::cout << "op: " << this->Operators[i].getNick() << "new: " << New.getNick();
         if (this->Operators[i].getNick() == New.getNick())
             return true;
     }
