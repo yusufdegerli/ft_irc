@@ -7,7 +7,7 @@ void Server :: INVITE(Client &client)
 
     if (channels.empty() || nickname.empty())
     {
-        client.print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " " + client.getNick() + " INVITE :Not enough parameters" + "\r\n"); // 461
+        client.print(client.clientInfo(client) +client.getNick() + " INVITE :Not enough parameters" + "\r\n"); // 461
         return ;
     }
 
@@ -19,7 +19,7 @@ void Server :: INVITE(Client &client)
     }
     if (j == this->channels.size())
     {
-        client.print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " " + client.getNick() + " " + channel + " :No such channel\r\n"); //403
+        client.print(client.clientInfo(client) +client.getNick() + " " + channel + " :No such channel\r\n"); //403
         return ;
     }
     size_t i;
@@ -29,7 +29,7 @@ void Server :: INVITE(Client &client)
             break ;
         if (nickname == (this->channels[j].getMembers())[i].getNick())
         {
-            client.print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " " + client.getNick() + " " + nickname + " " + channel + " :is already on channel\r\n"); //443
+            client.print(client.clientInfo(client) +client.getNick() + " " + nickname + " " + channel + " :is already on channel\r\n"); //443
             return ;
         }
     }
@@ -46,10 +46,10 @@ void Server :: INVITE(Client &client)
     }
     if (this->channels[j].getInviteOnly() && k == this->channels[j].getOperators().size())
     {
-        client.print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " " + client.getNick() + " " + channel + " :You're not channel operator\r\n"); //482
+        client.print(client.clientInfo(client) +client.getNick() + " " + channel + " :You're not channel operator\r\n"); //482
         return ;
     }
-    client.print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " " + client.getNick() + " " + nickname + " " + channel + "\r\n"); //341
+    client.print(client.clientInfo(client) +client.getNick() + " " + nickname + " " + channel + "\r\n"); //341
     for (size_t m = 0; m < this->clients.size(); m++)
     {
         if (this->clients[m].getNick() == nickname)

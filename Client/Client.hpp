@@ -63,6 +63,7 @@ class Client
         Client(int fd);
         bool getLoggedStatus();
         void print(std::string str);
+        std::string clientInfo(Client &client);
         
         int getFd();
         int getSocket();

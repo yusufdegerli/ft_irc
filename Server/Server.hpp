@@ -71,6 +71,7 @@ class Server
         void WHO(Client &client);
         void PRIVMSG(Client &client);
         void KICK(Client &client);       //Kişiyi, kanaldan/server'dan atma
+        void LIST(Client &client);
         void List(std::string commandline, int acc_val);         //kanalları konularıyla birlikte liseteleme
         
 

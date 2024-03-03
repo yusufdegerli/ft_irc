@@ -179,6 +179,12 @@ void Client :: print(std::string str)
     // std::cout << str << std::endl;
 }
 
+std::string Client :: clientInfo(Client &client)
+{
+    std::string info = ":" + client.getNick() + "!" + client.getUsername() + "@" + client.getRealIp() + " ";
+    return info;
+}
+
 std::string Client :: getNick() const
 {
     return this->usrNick;

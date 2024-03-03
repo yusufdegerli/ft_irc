@@ -34,14 +34,14 @@ void Server::PART(Client &client)
             }
             if (i >= before_erase)
             {
-                client.print(":" + client.getRealIp() + " 442 " + client.getNick() + ": No such nick/channel\n");
+                client.print(":" + client.getRealIp() + " 442 " + client.getNick() + ": No such nick/channel\r\n");
                 // client.print(":" + client.getRealIp() + client.getNick() + " " + chan.getName() + " :You're not on that channel" + "\r\n"); // 442
                 return ;
             }
         }
         else
         {
-            client.print(":" + client.getRealIp() + " 403 " + client.getNick() + ": No such nick/channel\n");
+            client.print(":" + client.getRealIp() + " 403 " + client.getNick() + ": No such nick/channel\r\n");
             client.print(client.getNick() + " " + channel_list[k] + " :No such channel" + "\r\n"); // 403
         }
     }

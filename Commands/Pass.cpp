@@ -4,7 +4,7 @@ void Server :: PASS(Client &client)
 {
     if (client.getLoggedStatus() == 1)
     {
-        client.print(":" + client.getRealIp() + " 462 " + client.getNick() + " : You may not reregister\n");
+        client.print(":" + client.getRealIp() + " 462 " + client.getNick() + " : You may not reregister\r\n");
         return ;
     }
 
@@ -12,7 +12,7 @@ void Server :: PASS(Client &client)
     {
         for (size_t i = 0; i < this->commands.size(); i++)
             std::cout << "aaaaaaa: "<< this->commands[i] << std::endl;
-        client.print(":" + client.getRealIp() + " 461 " + client.getNick() + "PASS : Not enough parameters\n");
+        client.print(":" + client.getRealIp() + " 461 " + client.getNick() + "PASS : Not enough parameters\r\n");
         return ;
     }
 
@@ -24,6 +24,6 @@ void Server :: PASS(Client &client)
     else
     {
         std::cout << this->password << std::endl;
-        client.print(":" + client.getRealIp() + " 464 " + client.getNick() + "PASS : Password incorrect\n");
+        client.print(":" + client.getRealIp() + " 464 " + client.getNick() + "PASS : Password incorrect\r\n");
     }
 }

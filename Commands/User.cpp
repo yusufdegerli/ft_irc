@@ -20,7 +20,7 @@ void Server :: USER(Client &client)
     }
     if(client.getUsername().empty() == false && client.getHostname().empty() == false)
     {
-        client.print(":" + client.getRealIp() + " 462 " + client.getNick() + " USER : Not enough parameters\n");
+        client.print(":" + client.getRealIp() + " 462 " + client.getNick() + " USER : Not enough parameters\r\n");
         return ; 
     }
 
@@ -36,29 +36,24 @@ void Server :: USER(Client &client)
         client.setHostname(this->commands[4]);
         client.setUsername(this->commands[1]);
         //LINE 1
-        client.print(":"); client.print(client.getRealIp()); client.print(" 001 "); client.print(client.getNick());
-        client.print(" : Welcome to the Internet Relay Network ");client.print(client.getNick());client.print("!");client.print(this->commands[1]);
-        client.print(client.getUsername());client.print("@");client.print(client.getRealIp());client.print("\n");
+        client.print(":" + client.getRealIp() + " 001 " + client.getNick() + " : Welcome to the Internet Relay Network " \
+        + client.getNick() + "!" + this->commands[1] + client.getUsername() + "@" + client.getRealIp() + "\r\n");
 
         //LINE 2
-        client.print(":"); client.print(client.getRealIp()); client.print(" 002 "); client.print(client.getNick());
-        client.print(" : Your host is "); client.print(client.getRealIp());client.print(", running version v1.0\n");
+        client.print(":" + client.getRealIp() + " 002 " + client.getNick() + " : Your host is " + client.getRealIp() + ", running version v1.0\r\n");
 
         //LINE 3
-        client.print(":"); client.print(client.getRealIp()); client.print(" 003 "); client.print(client.getNick());
-        client.print(" This server was created ");client.print(std::string(buffer));
+        client.print(":" + client.getRealIp() + " 003 " + client.getNick() + " This server was created " + std::string(buffer) + "\r\n");
 
         //LINE 4 UNKNOWN will gonna change
-        client.print(":"); client.print(client.getRealIp()); client.print(" 251 "); client.print(client.getNick());
-        client.print(" There are ");client.print("UNKOWN!"); client.print(" users and 0 services on 1 server\n");
+        client.print(":" + client.getRealIp() + " 251 " + client.getNick() + " There are " + "UNKOWN!" + " users and 0 services on 1 server\r\n");
         return ;
     }
     else
     {
-        client.print(":" + client.getRealIp() + " 462 " + client.getNick() + "USER : You may not reregister\n");
+        client.print(":" + client.getRealIp() + " 462 " + client.getNick() + "USER : You may not reregister\r\n");
         return ; 
     }
-
     client.setUsername(this->commands[1]);
     client.setHostname(this->commands[3]);
 }

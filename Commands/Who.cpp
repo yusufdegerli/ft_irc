@@ -9,7 +9,7 @@ void Server :: WHO(Client &client)
         {
             client.print("Nick: " + this->clients[j].getNick() + "\n");
         }
-        client.print(":" + client.getRealIp() + " 315 " +  this->commands[1] + ": End of WHO list\n");
+        client.print(":" + client.getRealIp() + " 315 " +  this->commands[1] + ": End of WHO list\r\n");
         return ;
     }
     else
@@ -30,5 +30,5 @@ void Server :: WHO(Client &client)
             }
         }
     }
-    client.print(":" + client.getRealIp() + " 315 " + client.getNick() + ": End of WHO list\n");
+    client.print(":" + client.getRealIp() + " 315 " + client.getNick() + ": End of WHO list\r\n");
 }

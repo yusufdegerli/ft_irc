@@ -28,7 +28,7 @@ void Server :: NICK(Client &client)
         
     if (this->commands.size() != 2 || this->commands.size() == 1)
     {
-        client.print(":" + client.getRealIp() + " 431 " + client.getNick() + " : No nickname given\n");
+        client.print(":" + client.getRealIp() + " 431 " + client.getNick() + " : No nickname given\r\n");
         return ;
     }
     
@@ -37,7 +37,7 @@ void Server :: NICK(Client &client)
         if (this->clients[i].getNick() == this->commands[1])
         {
             client.print(":" + client.getRealIp() + " 433 " + client.getNick() + " " + this->commands[1]\
-             + " :Nickname is already in use");
+             + " :Nickname is already in use\r\n");
             return ;
         }
     }

@@ -6,7 +6,7 @@ void Server::QUIT(Client &client)
     (void)client;
     if(this->commands[0].size() == 5)
     {
-        std::cout << "QUIT: Client exiting from the network\n";
+        std::cout << "QUIT: Client exiting from the network\r\n";
         close(this->acc_val);
     }
     else
