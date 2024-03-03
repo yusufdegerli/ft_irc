@@ -20,7 +20,7 @@ void Server :: USER(Client &client)
     }
     if(client.getUsername().empty() == false && client.getHostname().empty() == false)
     {
-        client.print(":" + client.getRealIp() + " 462 " + client.getNick() + "USER : Not enough parameters\n");
+        client.print(":" + client.getRealIp() + " 462 " + client.getNick() + " USER : Not enough parameters\n");
         return ; 
     }
 
@@ -55,7 +55,7 @@ void Server :: USER(Client &client)
     }
     else
     {
-        client.print(":" + client.getRealIp() + " 461 " + client.getNick() + "USER : Not enough parameters\n");
+        client.print(":" + client.getRealIp() + " 462 " + client.getNick() + "USER : You may not reregister\n");
         return ; 
     }
 

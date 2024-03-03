@@ -3,9 +3,9 @@
 void Server::PART(Client &client)
 {
     std::string channels = this->commands[1];
-    std::string reason = this->commands[2];
+    std::string reason = "";
 
-    if (channels.empty())
+    if (channels.size() != 2)
     {
         client.print(client.getNick() + " PART :Not enough parameters" + "\r\n"); // 461
         return ;
@@ -13,6 +13,8 @@ void Server::PART(Client &client)
     std::vector<std::string> channel_list;
     channel_list = create_list(channels);
 
+    for (size_t j = 2; j < this->commands.size(); j++)
+        reason += this->commands[j];
     for (size_t k = 0; k < channel_list.size(); k++)
     {
         if (this->findChannel(channel_list[k]))
@@ -25,7 +27,7 @@ void Server::PART(Client &client)
                 if (client.getNick() == chan.getMembers()[i].getNick())
                 {
                     for (size_t m = 0; m < chan.getMembers().size(); m++)
-                        chan.getMembers()[m].print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " PART " + chan.getName() + "\r\n");
+                        chan.getMembers()[m].print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " PART " + chan.getName() + " "+ reason + "\r\n");
                     chan.getMembers().erase(chan.getMembers().begin() + i);
                     break ;
                 }
