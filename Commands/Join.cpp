@@ -55,7 +55,6 @@ void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,
         if (this->findChannel(channel_list[i])) //channel var
         {
             Channel &chan = this->channels[returnChannelIndex(channel_list[i])];
-            std::cout << "key requeru " << chan.getKeyRequired() << std::endl;
             if (chan.getKeyRequired())
             {
                 if (!keys.empty())
@@ -69,7 +68,12 @@ void Server :: JOIN(Client &client) // usage JOIN <channel>{,<channel>} [<key>{,
                 }
             }
             else
-                this->addToChannel(chan, client);
+            {
+                if (chan.getInviteOnly())
+                    client.print("To join this channel you need an invitation");
+                else
+                    this->addToChannel(chan, client);
+            }
         }
         else //yok
         {

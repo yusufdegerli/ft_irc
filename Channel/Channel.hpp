@@ -51,7 +51,13 @@ class Channel{
         bool checkMembers(Client const &New);
         bool checkOperators(Client const &New);
         void printMembers();
+
+        void inviteOnly(char command, Client &client);
+        void operators(char command, Client &operators, Client &client);
+        void keys(char command, std::string key, Client &client);
         
         void    setTopic(std::string topic);
+        int returnOperatorIndex(std::string nick);
+
         //void writeMembersByName(std::vector<Client> members);
 };

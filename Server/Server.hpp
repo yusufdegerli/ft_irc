@@ -73,6 +73,7 @@ class Server
         void KICK(Client &client);       //Kişiyi, kanaldan/server'dan atma
         void LIST(Client &client);
         void List(std::string commandline, int acc_val);         //kanalları konularıyla birlikte liseteleme
+        void MODE(Client &client);
         
 
         int checkActivation(Client &client);
@@ -83,8 +84,8 @@ class Server
         size_t returnClientIndex(std::string clientNick, Channel &channel);
         size_t returnChannelIndex(std::string channel);
         void addToChannel(Channel &chan, Client &client);
-
-
+        
+        int getClient(std::string nick);
 };
 
 std::vector<std::string> create_list(std::string str);

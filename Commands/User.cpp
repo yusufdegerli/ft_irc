@@ -18,7 +18,7 @@ void Server :: USER(Client &client)
         client.print("Set nickname first. Use NICK command\n");
         return ;
     }
-    if(client.getUsername().empty() == false && client.getHostname().empty() == false)
+    if (client.getUsername().empty() == false && client.getHostname().empty() == false)
     {
         client.print(":" + client.getRealIp() + " 462 " + client.getNick() + " USER : Not enough parameters\r\n");
         return ; 

@@ -128,6 +128,7 @@ void Client::setUsrSurname(const std::string &usrSurname)
 void Client::setUsername(const std::string &usrUser)
 {
     this->usrUser = usrUser;
+    this->usrName = usrUser;
     std::cout << "user: " << this->usrUser << std::endl;
 }
 
