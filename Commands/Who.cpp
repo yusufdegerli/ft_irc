@@ -24,7 +24,7 @@ void Server :: WHO(Client &client)
                     client.print("Ip: " + this->channels[i].getMembers()[i].getRealIp() + "\n");
                     client.print("Hostname: " + this->channels[i].getMembers()[i].getHostname() + "\n");
                     client.print("Username: " + this->channels[i].getMembers()[i].getUsername() + "\n");
-                    client.print("Name: " + this->channels[i].getMembers()[i].getName() + "\n");
+                    // client.print("Name: " + this->channels[i].getMembers()[i].getName() + "\n");
                 }
                 break ;
             }

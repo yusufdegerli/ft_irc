@@ -27,7 +27,7 @@ class Client
         std::string usrPass;
         std::string usrNick;
         std::string usrIp;
-        std::string usrName;
+        // std::string usrName;
         std::string usrSurname;
         std::string usrUser;
         std::string realIp;
@@ -47,7 +47,7 @@ class Client
         void setUsrPass(const std::string &usrPass);
         void setUsrNick(const std::string &usrNick);
         void setUsrIp(const std::string &usrIp);
-        void setUsrName(const std::string &usrName);
+        // void setUsrName(const std::string &usrName);
         void setUsrSurname(const std::string &usrSurname);
         void setUsername(const std::string &usrUser);
         void setRealIp(const std::string &realIp);
@@ -68,7 +68,7 @@ class Client
         int getFd();
         int getSocket();
         std::string getNick() const;
-        std::string getName();
+        // std::string getName();
         std::string getUsername();
         std::string getHostname();
 };

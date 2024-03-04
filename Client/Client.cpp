@@ -2,9 +2,11 @@
 
 Client::Client(int fd)
 {
-    this->usrName = "";
+    // this->usrName = "";
+    this->usrUser = "";
     this->usrNick = "";
     this->fd = fd;
+    this->socketNumber = fd;
     this->isActive = false;
     this->isLogged = false;
     std::cout << "fd " << this->fd << std::endl;
@@ -18,7 +20,7 @@ Client::Client()
     this->realIp = -1;
     this->information = 1;
 
-    this->usrName = "";
+    // this->usrName = "";
     this->usrNick = "";
     this->usrPass = "";
     this->usrSurname = "";
@@ -26,13 +28,13 @@ Client::Client()
     this->hostName = "";
 }
 
-Client::Client(Client const &cpy) : information(cpy.information)
+Client::Client(Client const &cpy) : information(cpy.information) // do with *this = cpy
 {
     this->socketNumber = cpy.socketNumber;
     this->uId = cpy.uId;
     this->usrIp = cpy.usrIp;
     this->realIp = cpy.realIp;
-    this->usrName = cpy.usrName;
+    // this->usrName = cpy.usrName;
     this->usrNick = cpy.usrNick;
     this->usrPass = cpy.usrPass;
     this->usrSurname = cpy.usrSurname;
@@ -46,7 +48,7 @@ void    Client::operator=(Client const &cpy)
     this->uId = cpy.uId;
     this->usrIp = cpy.usrIp;
     this->realIp = cpy.realIp;
-    this->usrName = cpy.usrName;
+    // this->usrName = cpy.usrName;
     this->usrNick = cpy.usrNick;
     this->usrPass = cpy.usrPass;
     this->usrSurname = cpy.usrSurname;
@@ -83,6 +85,20 @@ void Client::setSocket(const int socket)
     this->socketNumber = socket;
 }
 
+void Client::setUsrPass(const std::string &usrPass)
+{
+    this->usrPass = usrPass;
+    std::cout << "Password " << this->usrPass << "is saved for client " << this->socketNumber << std::endl;
+}
+
+void Client :: setLoggin()
+{
+    this->isLogged = true;
+    std::cout << "Client " << this->socketNumber << " logged in the system" << std::endl;
+    this->print("You are in the system\n");
+}
+
+
 void Client::setHostname(const std::string &hostname)
 {
     this->hostName = hostname;
@@ -94,11 +110,6 @@ void Client::setuId(const std::string &uId)
     this->uId = uId;
 }
 
-void Client::setUsrPass(const std::string &usrPass)
-{
-    this->usrPass = usrPass;
-    std::cout << "user password: " << this->usrPass << std::endl;
-}
 
 void Client::setUsrNick(const std::string &usrNick)
 {
@@ -112,12 +123,12 @@ void Client::setUsrIp(const std::string &usrIp)
     this->usrIp = usrIp;
 }
 
-void Client::setUsrName(const std::string &usrName)
-{
-    this->usrName = usrName;
-    std::cout << "Client " << this->socketNumber << " set nickname: " << this->usrName <<std::endl;
-    this->print("Real name: " + this->usrName + "\n");
-}
+// void Client::setUsrName(const std::string &usrName)
+// {
+//     this->usrName = usrName;
+//     std::cout << "Client " << this->socketNumber << " set nickname: " << this->usrName <<std::endl;
+//     this->print("Real name: " + this->usrName + "\n");
+// }
 
 void Client::setUsrSurname(const std::string &usrSurname)
 {
@@ -128,8 +139,10 @@ void Client::setUsrSurname(const std::string &usrSurname)
 void Client::setUsername(const std::string &usrUser)
 {
     this->usrUser = usrUser;
-    this->usrName = usrUser;
-    std::cout << "user: " << this->usrUser << std::endl;
+    std::cout << "Client " << this->socketNumber << " set nickname: " << this->usrUser <<std::endl;
+    this->print("Real name: " + this->usrUser + "\n");
+    // this->usrName = usrUser;
+    // std::cout << "user: " << this->usrUser << std::endl;
 }
 
 void Client::setRealIp(const std::string &realIp)
@@ -147,12 +160,6 @@ int Client::getInformation()const{return this->information;}
 
 Client::~Client(){}
 
-void Client :: setLoggin()
-{
-    this->isLogged = true;
-    std::cout << "Client " << this->socketNumber << " logged in the system" << std::endl;
-    this->print("You are in the system\n");
-}
 
 int Client :: getFd()
 {
@@ -191,10 +198,10 @@ std::string Client :: getNick() const
     return this->usrNick;
 }
 
-std::string Client :: getName()
-{
-    return this->usrName;
-}
+// std::string Client :: getName()
+// {
+//     return this->usrName;
+// }
 
 std::string Client :: getUsername()
 {

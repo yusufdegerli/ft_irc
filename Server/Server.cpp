@@ -175,7 +175,7 @@ void Server :: addToChannel(Channel &chan, Client &client)
         for (size_t m = 0; m < chan.getMembers().size() - 1; m++)
             client.print(":" + chan.getMembers()[m].getNick() + "!" + chan.getMembers()[m].getUsername() + '@' + chan.getMembers()[m].getRealIp() + " JOIN " + chan.getName() + "\r\n");
         if (chan.getTopic() != "")
-            client.print(client.clientInfo(client) +client.getNick() + " " + chan.getName() + " :" + chan.getTopic());
+            client.print(client.clientInfo(client) + client.getNick() + " " + chan.getName() + " :" + chan.getTopic());
         chan.getSecretChan() ? symbol = "@" : symbol = "=";
         client.print(client.clientInfo(client) +client.getNick() + " " + symbol + " " + chan.getName()  + " :");
         chan.checkOperators(client) ? prefix = "@" : prefix = "v";
@@ -187,7 +187,7 @@ void Server :: addToChannel(Channel &chan, Client &client)
             client.print(prefix + chan.getMembers()[m].getNick());
         }
         client.print("\r\n");
-        client.print(client.clientInfo(client) +client.getNick() + " " + chan.getName() + " :End of /NAMES list\r\n");
+        client.print(client.clientInfo(client) + client.getNick() + " " + chan.getName() + " :End of /NAMES list\r\n");
     }
     else
         client.print("You are already in the channel " + chan.getName() + "\r\n");

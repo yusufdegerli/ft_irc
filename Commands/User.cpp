@@ -1,28 +1,26 @@
 #include "../Server/Server.hpp"
 
 void Server :: USER(Client &client)
-{
-    if (client.getName() != "")
-    {
-        client.print("Real name is already set\n");
-        return ;
-    }
-    if (client.getLoggedStatus() == 0)
-    {
-        client.print("Log into the system first. Use PASS command\n");
-        return ;
-    }
-    
-    if (client.getNick() == "")
-    {
-        client.print("Set nickname first. Use NICK command\n");
-        return ;
-    }
+{ 
     if (client.getUsername().empty() == false && client.getHostname().empty() == false)
     {
         client.print(":" + client.getRealIp() + " 462 " + client.getNick() + " USER : Not enough parameters\r\n");
         return ; 
     }
+
+    if (client.getUsername() != "")
+    {
+        client.print("Real name is already set\n");
+        return ;
+    }
+    
+
+    if (this->commands.size() != 5)
+    {
+        client.print("Wrong usage of the USER command. Try 'USER <Name> 0 * <HostName>'\n");
+        return ;
+    }
+   
 
     if (this->commands.size() == 5 && this->commands[2].compare("0") == 0 && this->commands[3].compare("*") == 0)
     {
@@ -54,6 +52,6 @@ void Server :: USER(Client &client)
         client.print(":" + client.getRealIp() + " 462 " + client.getNick() + "USER : You may not reregister\r\n");
         return ; 
     }
-    client.setUsername(this->commands[1]);
-    client.setHostname(this->commands[3]);
+    // client.setUsername(this->commands[1]);
+    // client.setHostname(this->commands[3]);
 }

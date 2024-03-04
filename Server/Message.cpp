@@ -39,6 +39,8 @@ void Server :: executeCommands(int fd)
     {
         if (this->commands[0] == commands[i]) // check activation for all functions
         {
+            if (i > 0 && this->checkActivation(*client) == -1)
+                return ;
             (this->*(cmds[i]))(*client);
             break;
         }
@@ -51,7 +53,7 @@ void Server :: executeCommands(int fd)
 
 int Server :: checkActivation(Client &client)
 {
-    if (client.getLoggedStatus() == 0)
+    if (client.getLoggedStatus() == false)
     {
         client.print("Log into the system first. Use PASS command\n");
         return -1;
@@ -63,7 +65,7 @@ int Server :: checkActivation(Client &client)
         return -1;
     }
 
-    if (client.getName() == "")
+    if (client.getUsername() == "")
     {
         client.print("Set real name first. Use USER command\n");
         return -1;

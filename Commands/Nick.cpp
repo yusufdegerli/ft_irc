@@ -20,11 +20,7 @@ void Server :: NICK(Client &client)
         }
         nameCnt++;
     }
-    if (client.getLoggedStatus() == 0)
-    {
-        client.print("Log into the system first. Use PASS command\n");
-        return ;
-    }
+
         
     if (this->commands.size() != 2 || this->commands.size() == 1)
     {
