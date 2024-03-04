@@ -18,57 +18,51 @@ class Server;
 
 class Client
 {
-    private:
+    protected:
         int socketNumber;
-        std::string hostName;
-        int information;
-        std::string uId;
+        std::string hostName; //check if it is correct
 
-        std::string usrPass;
         std::string usrNick;
-        std::string usrIp;
-        // std::string usrName;
+        //std::string usrName; //check if it is necessary
         std::string usrSurname;
         std::string usrUser;
         std::string realIp;
 
         int fd;
         bool isLogged;
-        bool isActive;
+        bool inServer;
+        std::vector<std::string> hasInvitationTo;
     public:
         Client();
         void operator=(Client const &cpy);
         Client(Client const &cpy);
-        //Client(int hostName, std::string uId);
         
         void setSocket(const int socket);
         void setHostname(const std::string &hostname);
-        void setuId(const std::string &uId);
-        void setUsrPass(const std::string &usrPass);
         void setUsrNick(const std::string &usrNick);
-        void setUsrIp(const std::string &usrIp);
-        // void setUsrName(const std::string &usrName);
+        //void setUsrName(const std::string &usrName);
         void setUsrSurname(const std::string &usrSurname);
         void setUsername(const std::string &usrUser);
         void setRealIp(const std::string &realIp);
-        void setInformation(const int &information);
         void setFd(int fd);
-        void setLoggin();
+        void setLoggin(bool status);
         
         std::string &getRealIp();
-        int getInformation()const;
         
-        //Client(std::string usrPass, std::string usrNick, std::string usrUser, std::string usrIp, std::string usrName, std::string usrSurname);
         ~Client();
         Client(int fd);
         bool getLoggedStatus();
         void print(std::string str);
-        std::string clientInfo(Client &client);
+        void clientInfo(Client &receive, Client &client);
         
         int getFd();
         int getSocket();
         std::string getNick() const;
-        // std::string getName();
+        //std::string getName();
         std::string getUsername();
         std::string getHostname();
+        bool getinServer();
+        void setInServer(bool status);
+        bool ifHasInvitation(std::string chan);
+        std::vector<std::string> getHasInvitationTo();
 };

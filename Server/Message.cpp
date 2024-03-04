@@ -41,6 +41,7 @@ void Server :: executeCommands(int fd)
         {
             if (i > 0 && this->checkActivation(*client) == -1)
                 return ;
+            std::cout << client->getinServer() << std::endl;
             (this->*(cmds[i]))(*client);
             break;
         }
@@ -53,7 +54,7 @@ void Server :: executeCommands(int fd)
 
 int Server :: checkActivation(Client &client)
 {
-    if (client.getLoggedStatus() == false)
+    if (!client.getinServer())
     {
         client.print("Log into the system first. Use PASS command\n");
         return -1;

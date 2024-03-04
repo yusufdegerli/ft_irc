@@ -12,50 +12,6 @@ Server::Server(int port, std::string password)
     this->adr_len = sizeof(this->server_address);
 }
 
-/* void pieceByPiece(char *buff, std::vector<std::string> &commands, Client *client)
-{
-    std::string line;
-    (void)buff;
-
-    std::string lastName;
-    std::string name;
-    std::string ip;
-    size_t len;
-    std::string user;
-    std::string lastStr = "";
-    // std::istringstream buffer(buff);
-    // while(std::getline(buffer, line, '\n'))
-    // {
-    //     bufferRaw.push_back(line);
-    // }
-    if (client->getInformation() == 2 && commands.empty())
-    {
-        client->setUsrPass(commands[0].substr(6, commands[0].size() -1));
-        client->setUsrNick(commands[1].substr(5, commands[1].size() -1));
-        lastStr = commands[2];
-        lastName = strrchr(lastStr.c_str(), ' ');
-        client->setUsrSurname(lastName.erase(0,1));
-        len = lastStr.size() - lastName.size();
-        int i = len;
-        while(!isdigit(lastStr.c_str()[i]))
-            i--;
-        client->setUsrName(lastStr.substr(i + 1, len - i - 1));
-        int index = lastStr.find(':');
-        index -= 2;
-        len -= index;
-        while(lastStr.c_str()[index] != ' ')
-            index--;
-        client->setHostname(lastStr.substr(index + 1, len - index));
-        index--;
-        while(lastStr.c_str()[index] != ' ')
-            index--;
-        //client->setUsrUser(lastStr.substr(5, index - 5));
-        //Client kullanici(passwd, nick, user, ip, name, lastName.erase(0, 1));
-    }
-    client->setInformation(client->getInformation() + 1);
-}
- */
-
 void Server :: userAccept()
 {
     struct pollfd connect;
@@ -68,7 +24,6 @@ void Server :: userAccept()
         this->clients.push_back(client);
         this->clients[this->acc_val - 4].setFd(this->acc_val);
 
-        this->clients[this->acc_val - 4].setInformation(1);
         this->clients[this->acc_val - 4].setSocket(this->acc_val);
         unsigned long clientAddr = ntohl(this->server_address.sin_addr.s_addr);
         std::string clientIP = std::to_string((clientAddr >> 24) & 0xFF) + "." + std::to_string((clientAddr >> 16) & 0xFF) + "." + std::to_string((clientAddr >> 8) & 0xFF) + "." + std::to_string(clientAddr & 0xFF);
@@ -171,13 +126,22 @@ void Server :: addToChannel(Channel &chan, Client &client)
     {
         chan.addToMembers(client);
         for (size_t m = 0; m < chan.getMembers().size(); m++)
-            chan.getMembers()[m].print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " JOIN " + chan.getName() + "\r\n");
+        {
+            client.clientInfo(chan.getMembers()[m], client);
+            chan.getMembers()[m].print("JOIN " + chan.getName() + "\r\n");
+        }
         for (size_t m = 0; m < chan.getMembers().size() - 1; m++)
-            client.print(":" + chan.getMembers()[m].getNick() + "!" + chan.getMembers()[m].getUsername() + '@' + chan.getMembers()[m].getRealIp() + " JOIN " + chan.getName() + "\r\n");
+        {
+            client.clientInfo(client, chan.getMembers()[m]);
+            client.print("JOIN " + chan.getName() + "\r\n");
+        }
         if (chan.getTopic() != "")
-            client.print(client.clientInfo(client) + client.getNick() + " " + chan.getName() + " :" + chan.getTopic());
-        chan.getSecretChan() ? symbol = "@" : symbol = "=";
-        client.print(client.clientInfo(client) +client.getNick() + " " + symbol + " " + chan.getName()  + " :");
+        {
+            client.clientInfo(client, client);
+            client.print(client.getNick() + " " + chan.getName() + " :" + chan.getTopic());
+        }
+        client.clientInfo(client, client);
+        client.print(client.getNick() + " = " + chan.getName()  + " :");
         chan.checkOperators(client) ? prefix = "@" : prefix = "v";
         client.print(prefix + client.getNick());
         for (size_t m = 0; m < chan.getMembers().size() - 1; m++)
@@ -187,7 +151,8 @@ void Server :: addToChannel(Channel &chan, Client &client)
             client.print(prefix + chan.getMembers()[m].getNick());
         }
         client.print("\r\n");
-        client.print(client.clientInfo(client) + client.getNick() + " " + chan.getName() + " :End of /NAMES list\r\n");
+        client.clientInfo(client, client);
+        client.print(client.getNick() + " " + chan.getName() + " :End of /NAMES list\r\n");
     }
     else
         client.print("You are already in the channel " + chan.getName() + "\r\n");

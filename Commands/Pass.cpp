@@ -2,26 +2,26 @@
 
 void Server :: PASS(Client &client)
 {
-    if (client.getLoggedStatus() == true)
+    if (client.getLoggedStatus())
     {
-        client.print(":" + client.getRealIp() + " 462 " + client.getNick() + " : You are already logged\r\n");
+        client.print(":<serverip> or <hostname> 462 " + client.getNick() + " : You are already logged\r\n");
         return ;
     }
 
-    if (this->commands.size() != 2)
+    if (this->commands.size() < 2)
     {
-        client.print(":" + client.getRealIp() + " 461 " + client.getNick() + "PASS : Wrong number of parameters\r\n");
+        client.print(":<serverip> or <hostname> 461 " + client.getNick() + "PASS : Not enough parameters\r\n");
         return ;
     }
 
-    if (this->password == this->commands[1]) //at first come to the func, it should keep the pass. After that it should check. !you keep the wrong password(server pass)!
+    if (this->password == this->commands[1].substr(1))
     {
-        client.setUsrPass(commands[1].substr(1, commands[1].size() -1)); //keep the password
-        client.setLoggin();
+        client.print("You are in the system\n");
+        client.setInServer(true);
     }
     else
     {
-        // std::cout << this->password << std::endl;
-        client.print(":" + client.getRealIp() + " 464 " + client.getNick() + "PASS : Password incorrect\r\n");
+        //std::cout << this->password << std::endl;
+        client.print(":<serverip> or <hostname> 464 " + client.getNick() + "PASS : Password incorrect\r\n");
     }
 }

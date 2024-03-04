@@ -3,7 +3,6 @@
 void Server::QUIT(Client &client)
 {
     std::string reason;
-    (void)client;
     if(this->commands[0].size() == 5)
     {
         std::cout << "QUIT: Client exiting from the network\r\n";
@@ -14,6 +13,7 @@ void Server::QUIT(Client &client)
         for (size_t i = 0; i < this->commands.size(); i++)
             reason += this->commands[i];
         std::cout << "QUIT:" << reason << std::endl;
+        client.setLoggin(false);
         close(this->acc_val);
     }
     close(this->acc_val);

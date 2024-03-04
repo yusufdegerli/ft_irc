@@ -11,23 +11,23 @@ void Server :: KICK(Client &client)
     Channel &chan = this->channels[returnChannelIndex(this->commands[1])];
     if(this->commands.size() < 2)
     {
-        client.print(": " + client.getRealIp() +" 461 " + client.getNick() + "KICK : Not enough parameters\r\n");
+        client.print(":<serverip> or <hostname> 461 " + client.getNick() + "KICK : Not enough parameters\r\n");
         return ;
     }
     else if(this->findChannel(this->commands[1]) == false)
     {
-        client.print(": " + client.getRealIp() + " 403 " + client.getNick() + "KICK: No such channel\r\n");
+        client.print(":<serverip> or <hostname> 403 " + client.getNick() + "KICK: No such channel\r\n");
         return ;
     }
     else if(this->findChannel(this->commands[1]) == true && chan.checkMembers(client) == false)
     {
-        client.print(": " + client.getRealIp() + " 442 " + client.getNick() + "KICK: You are not on that channel\r\n");
+        client.print(":<serverip> or <hostname> 442 " + client.getNick() + "KICK: You are not on that channel\r\n");
         return;
     }
     else if(this->findChannel(this->commands[1]) == true && chan.checkMembers(chan\
     .getMembers()[returnClientIndex(this->commands[2], chan)]) == false)
     {
-        client.print(": " + client.getRealIp() + " 441 " + client.getNick() + "KICK: They aren't on that channel\r\n");
+        client.print(":<serverip> or <hostname> 441 " + client.getNick() + "KICK: They aren't on that channel\r\n");
         return ;
     }
     else

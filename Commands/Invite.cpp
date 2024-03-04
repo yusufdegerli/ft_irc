@@ -5,9 +5,9 @@ void Server :: INVITE(Client &client)
     std::string nickname = this->commands[1];
     std::string channel = this->commands[2];
 
-    if (channels.empty() || nickname.empty())
+    if (this->commands.size() < 3)
     {
-        client.print(client.clientInfo(client) +client.getNick() + " INVITE :Not enough parameters" + "\r\n"); // 461
+        client.print(":<serverip> or <hostname> 461" + client.getNick() + " INVITE :Not enough parameters" + "\r\n");
         return ;
     }
 
@@ -19,7 +19,7 @@ void Server :: INVITE(Client &client)
     }
     if (j == this->channels.size())
     {
-        client.print(client.clientInfo(client) +client.getNick() + " " + channel + " :No such channel\r\n"); //403
+        client.print(":<serverip> or <hostname> 403" + client.getNick() + " " + channel + " :No such channel\r\n");
         return ;
     }
     size_t i;
@@ -29,13 +29,13 @@ void Server :: INVITE(Client &client)
             break ;
         if (nickname == (this->channels[j].getMembers())[i].getNick())
         {
-            client.print(client.clientInfo(client) +client.getNick() + " " + nickname + " " + channel + " :is already on channel\r\n"); //443
+            client.print(":<serverip> or <hostname> 443" + client.getNick() + " " + nickname + " " + channel + " :is already on channel\r\n");
             return ;
         }
     }
     if (i == this->channels[j].getMembers().size())
     {
-        client.print(client.getNick() + " " + channel + " :You're not on that channel\r\n"); //442
+        client.print(":<serverip> or <hostname> 442" + client.getNick() + " " + channel + " :You're not on that channel\r\n");
         return ;
     }
     size_t k;
@@ -46,17 +46,19 @@ void Server :: INVITE(Client &client)
     }
     if (this->channels[j].getInviteOnly() && k == this->channels[j].getOperators().size())
     {
-        client.print(client.clientInfo(client) +client.getNick() + " " + channel + " :You're not channel operator\r\n"); //482
+        client.print(":<serverip> or <hostname> 482" + client.getNick() + " " + channel + " :You're not channel operator\r\n");
         return ;
     }
-    client.print(client.clientInfo(client) +client.getNick() + " " + nickname + " " + channel + "\r\n"); //341
+    client.print(":<serverip> or <hostname> 341" + client.getNick() + " " + nickname + " " + channel + "\r\n");
     for (size_t m = 0; m < this->clients.size(); m++)
     {
         if (this->clients[m].getNick() == nickname)
         {
-            this->clients[m].print(":" + this->clients[m].getNick() + "!" + this->clients[m].getUsername() + '@' + this->clients[m].getRealIp() + " " + client.getNick() + " " + nickname + " " + channel + "\r\n");
+            client.clientInfo(this->clients[m], this->clients[m]);
+            this->clients[m].print(client.getNick() + " " + nickname + " " + channel + "\r\n");
+            this->clients[m].getHasInvitationTo().push_back(channel);
             break ;
         }
     }
-    //message to client
+
 }

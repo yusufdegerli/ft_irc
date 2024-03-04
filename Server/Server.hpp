@@ -54,26 +54,23 @@ class Server
         void checkPollStatus(int poll_status);
         int getAccVal();
 
-
         void parseMessage(char *buffer);
         void executeCommands(int fd);
         void PASS(Client &client);
         void NICK(Client &client);
         void USER(Client &client);
-        void Mode(std::string commandline, int acc_val);         //Kişi ve kanallar için, ünvan değiştirme
+        void MODE(Client &client);
 
         void JOIN(Client &client);
         void INVITE(Client &client);
-        void PART(Client &client);         //Bir kanaldan çıkmaya yarıyor
-        void TOPIC(Client &client);        //Kanalın ismini/konusunu değiştirme
+        void PART(Client &client);
+        void TOPIC(Client &client);
 
-        void QUIT(Client &client);         //Kullanıcının sunucudan bağlantısının kopması
+        void QUIT(Client &client);
         void WHO(Client &client);
         void PRIVMSG(Client &client);
-        void KICK(Client &client);       //Kişiyi, kanaldan/server'dan atma
+        void KICK(Client &client);
         void LIST(Client &client);
-        void List(std::string commandline, int acc_val);         //kanalları konularıyla birlikte liseteleme
-        void MODE(Client &client);
         
 
         int checkActivation(Client &client);

@@ -2,33 +2,28 @@
 
 Channel::Channel()
 {
-    this->key_required = false;
+    this->topic = "";
     this->name = "";
     this->key = "";
-    this->topic = "";
+    this->key_required = false;
+    this->invite_only = false;
 }
-
-// Channel::Channel(std::string const &name)
-// {
-//     this->key_required = false;
-//     this->name = name;
-//     this->topic = "";
-// }
 
 Channel::Channel(std::string name)
 {
-    this->key_required = false;
+    this->topic = "";
     this->name = name;
     this->key = "";
-    this->topic = "";
+    this->key_required = false;
+    this->invite_only = false;
 }
 Channel::Channel(std::string name, std::string key)
 {
-    this->key_required = true;
+    this->topic = "";
     this->name = name;
     this->key = key;
-    this->topic = "";
-    std::cout << "key: " << this->key << " name: " << this->name << std::endl;
+    this->key_required = true;
+    this->invite_only = false;
 }
 
 
@@ -56,9 +51,6 @@ void    Channel::operator=(Channel const &cpy)
 
 Channel::~Channel(){}
 
-
-
-
 std::string Channel::getName(){return this->name;}
 
 std::vector<Client> &Channel::getMembers(){return this->members;}
@@ -66,16 +58,11 @@ std::vector<Client> &Channel::getOperators(){return this->Operators;}
 
 bool Channel::getKeyRequired(){return this->key_required;}
 bool Channel::getInviteOnly(){return this->invite_only;}
-bool Channel::getSecretChan(){return this->secret_chan;}
 
 std::string &Channel::getKey(void){return this->key;}
 std::string &Channel::getTopic(void){return this->topic;}
 
-void Channel::addToMembers(Client const &New)
-{
-    Client client = New;
-    this->members.push_back(client);
-}
+void Channel::addToMembers(Client const &New){this->members.push_back(New);}
 void Channel::addToOperators(Client const &New){ this->Operators.push_back(New);}
 
 bool Channel :: checkMembers(Client const &New)
@@ -109,12 +96,4 @@ void Channel :: printMembers()
 
 void Channel :: setTopic(std::string topic){this->topic = topic;}
 
-/* void Channel::writeMembersByName(std::vector<Client> members)
-{
-    std::cout << "üst\n";
-    std::cout << "size: " << members.size() << std::endl;
-    for (size_t m = 0; m < members.size(); m++)
-        std::cout << members[m].getName() << std::endl;
-    std::cout << "alt\n";
-} */
 
