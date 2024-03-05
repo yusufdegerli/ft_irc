@@ -16,8 +16,9 @@ void Server::QUIT(Client &client)
         
         for (size_t m = 0; m < this->channels.size(); m++)
         {
-            this->commands[0] = "PART";
-            this->commands[1] = this->channels[m].getName();
+            this->commands.clear();
+            this->commands.push_back("PART");
+            this->commands.push_back(this->channels[m].getName());
             this->PART(client);
         }
         for (size_t n = 0; n < this->clients.size(); n++)

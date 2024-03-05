@@ -47,6 +47,9 @@ int Server :: checkRecvStatus(int recv_val, int i)
     }
     else if (recv_val == 0)
     {
+        this->commands.clear();
+        this->commands.push_back("QUIT");
+        this->QUIT(this->clients[this->acc_val - 4]);
         std::cout << "Client " << i + 3 << " logged out" << std::endl;
         close(this->fds[i].fd);
         this->fds[i].fd = 0;

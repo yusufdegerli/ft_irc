@@ -29,6 +29,12 @@ void Server :: JOIN(Client &client)
 
     if(this->checkActivation(client) == -1)
         return ;
+
+    if (this->commands.size() < 2)
+    {
+        client.print(":" + client.getRealIp() + " 461 " + client.getNick() + "JOIN : Not enough parameters\r\n");
+        return ;
+    }
     if (this->commands.size() < 3)
     {
         keys = "";
@@ -39,10 +45,15 @@ void Server :: JOIN(Client &client)
         keys = this->commands[2];
         key_list = create_list(keys);
     }
-
-    if (this->commands.size() < 2)
+    if (channels == "0" && this->commands.size() == 2)
     {
-        client.print(":" + client.getRealIp() + " 461 " + client.getNick() + "JOIN : Not enough parameters\r\n");
+        for (size_t m = 0; m < this->channels.size(); m++)
+        {
+            this->commands.clear();
+            this->commands.push_back("PART");
+            this->commands.push_back(this->channels[m].getName());
+            this->PART(client);
+        }
         return ;
     }
     std::vector<std::string> channel_list;
@@ -53,6 +64,8 @@ void Server :: JOIN(Client &client)
         if(channel_list[i][0] != '#')
         {
             client.print("JOIN: There is no # in the first character.\n");
+            channel_list.clear();
+            key_list.clear();
             return ;
         }
         if (this->findChannel(channel_list[i]))
@@ -68,12 +81,20 @@ void Server :: JOIN(Client &client)
                 else
                 {
                     client.print(":" + this->getServerIP() + " 475" + client.getNick() + " " + chan.getName() + " :Cannot join channel (+k)" + "\r\n");
+                    channel_list.clear();
+                    key_list.clear();
+                    return ;
                 }
             }
             else
             {
                 if (chan.getInviteOnly() && !client.ifHasInvitation(chan.getName()))
-                    client.print(client.getNick() + " " + chan.getName() + " :Cannot join channel (+i)\n");
+                {
+                    client.print(":" + this->getServerIP() + " 473" + client.getNick() + " " + chan.getName() + " :Cannot join channel (+i)\n");
+                    channel_list.clear();
+                    key_list.clear();
+                    return ;
+                }
                 else
                     this->addToChannel(chan, client);
             }
@@ -92,16 +113,13 @@ void Server :: JOIN(Client &client)
                 Channel chan(channel_list[i]);
                 this->channels.push_back(chan);
 
-                std::cout << client.getNick() << " created channel: " << channel_list[i] << " that doesn't requery key" << std::endl;
+                std::cout << client.getNick() << " created channel: " << channel_list[i] << " that doesn't require key" << std::endl;
             }
             Channel &chan1 = this->channels[returnChannelIndex(channel_list[i])];
             chan1.addToOperators(client);
             this->addToChannel(chan1, client);
         }
     }
-
-    // //this command also accepts the special argument of ("0", 0x30) instead of any of the usual parameters, which requests that the sending client leave all channels they are currently connected to. The server will process this command as though the client had sent a PART command for each channel they are a member of.
-       
     channel_list.clear();
     key_list.clear();
 }
