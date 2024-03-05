@@ -65,7 +65,7 @@ void Server :: JOIN(Client &client)
                 }
                 else
                 {
-                    client.print(":<serverip> or <hostname> 475" + client.getNick() + " " + chan.getName() + " :Cannot join channel (+k)" + "\r\n");
+                    client.print(":" + this->getServerIP() + " 475" + client.getNick() + " " + chan.getName() + " :Cannot join channel (+k)" + "\r\n");
                 }
             }
             else

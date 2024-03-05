@@ -6,7 +6,7 @@ void Server::TOPIC(Client &client)
 
     if (this->commands.size() < 2)
     {
-        client.print("::<serverip> or <hostname> 461 "+ client.getNick() + " TOPIC :Not enough parameters" + "\r\n");
+        client.print("::" + this->getServerIP() + " 461 "+ client.getNick() + " TOPIC :Not enough parameters" + "\r\n");
         return ;
     }
     if (this->commands.size() == 3)
@@ -24,11 +24,11 @@ void Server::TOPIC(Client &client)
                 chan.setTopic(topic);
         }
         else
-            client.print(":<serverip> or <hostname> 332 " + client.getNick() + " "+ chan.getName() + ":" + chan.getTopic() + "\r\n");//332
+            client.print(":" + this->getServerIP() + " 332 " + client.getNick() + " "+ chan.getName() + ":" + chan.getTopic() + "\r\n");//332
     }
     else
     {
-        client.print(":<serverip> or <hostname> 403 " + client.getNick() + " " + this->commands[1] + " :No such channel\r\n");
+        client.print(":" + this->getServerIP() + " 403 " + client.getNick() + " " + this->commands[1] + " :No such channel\r\n");
         return ;
     }
 }

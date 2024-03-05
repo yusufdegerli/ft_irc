@@ -34,6 +34,7 @@ class Server
         int optv;
         socklen_t adr_len;
         int acc_val;
+        std::string serverIP;
 
         std::vector<Client> clients;
         std::vector<Channel> channels;
@@ -83,6 +84,8 @@ class Server
         void addToChannel(Channel &chan, Client &client);
         
         int getClient(std::string nick);
+
+        std::string getServerIP(void);
 };
 
 std::vector<std::string> create_list(std::string str);

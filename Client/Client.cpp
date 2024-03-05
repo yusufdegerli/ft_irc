@@ -150,12 +150,15 @@ void Client::setInServer(bool status){this->inServer = status;}
 
 bool Client::ifHasInvitation(std::string chan)
 {
-    for (size_t m = 0; m < this->hasInvitationTo.size() - 1; m++)
+    for (size_t m = 0; m < this->hasInvitationTo.size(); m++)
     {
         if (this->hasInvitationTo[m] == chan)
             return true;
     }
     return false;
 }
-std::vector<std::string> Client::getHasInvitationTo() {return this->hasInvitationTo;}
+void Client::setHasInvitationTo(std::string channel)
+{
+    this->hasInvitationTo.push_back(channel);
+}
 

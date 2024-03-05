@@ -64,5 +64,7 @@ class Client
         bool getinServer();
         void setInServer(bool status);
         bool ifHasInvitation(std::string chan);
-        std::vector<std::string> getHasInvitationTo();
+        //std::vector<std::string> getHasInvitationTo();
+        void setHasInvitationTo(std::string channel);
+
 };

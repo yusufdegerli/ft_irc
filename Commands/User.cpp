@@ -46,7 +46,7 @@ void Server :: USER(Client &client)
     }
     else // maybe something like wrong usage is better
     {
-        client.print(":<serverip> or <hostname> 462 " + client.getNick() + "USER : You may not reregister\r\n");
+        client.print(":" + this->getServerIP() + " 462 " + client.getNick() + "USER : You may not reregister\r\n");
         return ; 
     }
 

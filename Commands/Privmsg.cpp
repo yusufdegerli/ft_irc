@@ -12,12 +12,12 @@ void Server :: PRIVMSG(Client &client)
     }
     if (this->commands.size() == 1)
     {
-        client.print(":<serverip> or <hostname> 411 " + client.getNick() + ": No recipient given PRIVMSG\r\n");
+        client.print(":" + this->getServerIP() + " 411 " + client.getNick() + ": No recipient given PRIVMSG\r\n");
         return ;
     }
     else if(this->commands.size() == 2)
     {
-        client.print(":<serverip> or <hostname> 412 " + client.getNick() + ": No recipient given PRIVMSG\r\n");
+        client.print(":" + this->getServerIP() + " 412 " + client.getNick() + ": No recipient given PRIVMSG\r\n");
         return ;
     }
     for (; i < this->clients.size(); i++)
@@ -37,7 +37,7 @@ void Server :: PRIVMSG(Client &client)
     }
     if(i == clients.size())
     {
-        client.print(":<serverip> or <hostname> 401 " + client.getNick() + ": No such nick/channel\r\n");
+        client.print(":" + this->getServerIP() + " 401 " + client.getNick() + ": No such nick/channel\r\n");
         return ;
     }
 }

@@ -4,13 +4,13 @@ void Server :: PASS(Client &client)
 {
     if (client.getLoggedStatus())
     {
-        client.print(":<serverip> or <hostname> 462 " + client.getNick() + " :You may not reregister\r\n");
+        client.print(":" + this->getServerIP() + " 462 " + client.getNick() + " :You may not reregister\r\n");
         return ;
     }
 
     if (this->commands.size() < 2)
     {
-        client.print(":<serverip> or <hostname> 461 " + client.getNick() + "PASS : Not enough parameters\r\n");
+        client.print(":" + this->getServerIP() + " 461 " + client.getNick() + "PASS : Not enough parameters\r\n");
         return ;
     }
 
@@ -40,6 +40,6 @@ void Server :: PASS(Client &client)
     }
     else
     {
-        client.print(":<serverip> or <hostname> 464 " + client.getNick() + "PASS : Password incorrect\r\n");
+        client.print(":" + this->getServerIP() + " 464 " + client.getNick() + "PASS : Password incorrect\r\n");
     }
 }

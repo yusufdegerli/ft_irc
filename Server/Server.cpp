@@ -9,6 +9,7 @@ Server::Server(int port, std::string password)
     this->server_address.sin_family = AF_INET;
     this->server_address.sin_port = htons(this->port);
     this->server_address.sin_addr.s_addr = INADDR_ANY;
+    this->serverIP = inet_ntoa(this->server_address.sin_addr);
     this->adr_len = sizeof(this->server_address);
 }
 
@@ -48,6 +49,7 @@ void Server :: start()
 	this->fds.push_back(server);
     this->fds[0].fd = this->serverfd;
     this->fds[0].events = POLLIN;
+
 
     std::cout << "Server is listening..." << std::endl;
 }
@@ -159,3 +161,9 @@ void Server :: addToChannel(Channel &chan, Client &client)
 }
 
 Server::~Server(){}
+
+std::string Server :: getServerIP(void)
+{
+    return this->serverIP;
+}
+

@@ -7,7 +7,7 @@ void Server :: INVITE(Client &client)
 
     if (this->commands.size() < 3)
     {
-        client.print(":<serverip> or <hostname> 461" + client.getNick() + " INVITE :Not enough parameters" + "\r\n");
+        client.print(":" + this->getServerIP() + " 461" + client.getNick() + " INVITE :Not enough parameters" + "\r\n");
         return ;
     }
 
@@ -19,7 +19,7 @@ void Server :: INVITE(Client &client)
     }
     if (j == this->channels.size())
     {
-        client.print(":<serverip> or <hostname> 403" + client.getNick() + " " + channel + " :No such channel\r\n");
+        client.print(":" + this->getServerIP() + " 403" + client.getNick() + " " + channel + " :No such channel\r\n");
         return ;
     }
     size_t i;
@@ -29,13 +29,13 @@ void Server :: INVITE(Client &client)
             break ;
         if (nickname == (this->channels[j].getMembers())[i].getNick())
         {
-            client.print(":<serverip> or <hostname> 443" + client.getNick() + " " + nickname + " " + channel + " :is already on channel\r\n");
+            client.print(":" + this->getServerIP() + " 443" + client.getNick() + " " + nickname + " " + channel + " :is already on channel\r\n");
             return ;
         }
     }
     if (i == this->channels[j].getMembers().size())
     {
-        client.print(":<serverip> or <hostname> 442" + client.getNick() + " " + channel + " :You're not on that channel\r\n");
+        client.print(":" + this->getServerIP() + " 442" + client.getNick() + " " + channel + " :You're not on that channel\r\n");
         return ;
     }
     size_t k;
@@ -46,17 +46,17 @@ void Server :: INVITE(Client &client)
     }
     if (this->channels[j].getInviteOnly() && k == this->channels[j].getOperators().size())
     {
-        client.print(":<serverip> or <hostname> 482" + client.getNick() + " " + channel + " :You're not channel operator\r\n");
+        client.print(":" + this->getServerIP() + " 482" + client.getNick() + " " + channel + " :You're not channel operator\r\n");
         return ;
     }
-    client.print(":<serverip> or <hostname> 341" + client.getNick() + " " + nickname + " " + channel + "\r\n");
+    client.print(":" + this->getServerIP() + " 341" + client.getNick() + " " + nickname + " " + channel + "\r\n");
     for (size_t m = 0; m < this->clients.size(); m++)
     {
         if (this->clients[m].getNick() == nickname)
         {
             client.clientInfo(this->clients[m], this->clients[m]);
             this->clients[m].print(client.getNick() + " " + nickname + " " + channel + "\r\n");
-            this->clients[m].getHasInvitationTo().push_back(channel);
+            this->clients[m].setHasInvitationTo(channel);
             break ;
         }
     }
