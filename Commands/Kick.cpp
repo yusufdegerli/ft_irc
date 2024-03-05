@@ -2,6 +2,7 @@
 
 void Server :: KICK(Client &client)
 {
+    size_t m = 0;
     if(this->checkActivation(client) == -1)
         return ;
     std::string comment = "";
@@ -14,6 +15,16 @@ void Server :: KICK(Client &client)
     if(this->commands.size() < 2)
     {
         client.print(":" + this->getServerIP() + " 461 " + client.getNick() + "KICK : Not enough parameters\r\n");
+        return ;
+    }
+    for (; m < chan.getOperators().size(); m++)
+    {
+        if(client.getNick().compare(chan.getOperators()[m].getNick()) == 0)
+        break ;
+    }
+    if (m == chan.getOperators().size())
+    {
+        client.print(":" + this->getServerIP() + " 482 " + client.getNick() + "KICK :You're not channel operator\r\n");
         return ;
     }
     else if(this->findChannel(this->commands[1]) == false)

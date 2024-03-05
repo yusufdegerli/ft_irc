@@ -2,6 +2,16 @@
 
 void Server :: NICK(Client &client)
 {
+    if(client.getinServer() == false)
+    {
+        client.print("Log into the system first. Use PASS command\n");
+        return ;
+    }
+    else if(this->commands.size() > 2)
+    {
+        client.print("There's have to be only one argument for the nickname\n");
+        return ;
+    }
      if (client.getNick() != "")
     {
         std::string oldName = "";
@@ -25,7 +35,6 @@ void Server :: NICK(Client &client)
         client.print(":" + this->getServerIP() + " 431 " + client.getNick() + " :No nickname given\r\n");
         return ;
     }
-    
     for (size_t i = 0; i < this->clients.size(); i++)
     {
         if (this->clients[i].getNick() == this->commands[1] && client.getLoggedStatus() == 0)

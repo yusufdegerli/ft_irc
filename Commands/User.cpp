@@ -2,6 +2,11 @@
 
 void Server :: USER(Client &client)
 {
+    if (client.getinServer() == false)
+    {
+        client.print("Log into the system first. Use PASS command\n");
+        return ;
+    }
     if (!client.getUsername().empty() && !client.getRealName().empty() && client.getLoggedStatus())
     {
         client.print("Real name is already set\n");
@@ -35,7 +40,7 @@ void Server :: USER(Client &client)
         client.print(":" + client.getRealIp() + " 003 " + client.getNick() + " This server was created " + std::string(buffer) + "\r\n");
 
         //LINE 4 UNKNOWN will gonna change
-        client.print(":" + client.getRealIp() + " 251 " + client.getNick() + " There are " + "UNKOWN!" + " users and 0 services on 1 server\r\n");
+        client.print(":" + client.getRealIp() + " 251 " + client.getNick() + " There are " + std::to_string(client.getNick().size()) + " users and 0 services on 1 server\r\n");
         client.setRealName(this->commands[4]);
         client.setUsername(this->commands[1]);
         return ;
