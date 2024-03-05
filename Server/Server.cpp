@@ -1,5 +1,31 @@
 #include "Server.hpp"
 
+Server::Server()
+{
+    this->password = "";
+    this->serverIP = "";
+    this->optv = 1;
+}
+
+Server::Server(Server const &New){*this = New;}
+void    Server::operator=(Server const &New)
+{
+    this->acc_val = New.acc_val;
+    this->acceptfd = New.acceptfd;
+    this->adr_len = New.adr_len;
+    this->channels = New.channels;
+    this->clients = New.clients;
+    this->commands = New.commands;
+    this->fds = New.fds;
+    this->optv = New.optv;
+    this->password = New.password;
+    this->port = New.port;
+    this->server_address = New.server_address;
+    this->serverfd = New.serverfd;
+    this->serverIP = New.serverIP;
+    this->sockfd = New.sockfd;
+}
+
 Server::Server(int port, std::string password)
 {
     this->port = port;
@@ -130,11 +156,6 @@ void Server :: addToChannel(Channel &chan, Client &client)
             client.clientInfo(chan.getMembers()[m], client);
             chan.getMembers()[m].print("JOIN " + chan.getName() + "\r\n");
         }
-        for (size_t m = 0; m < chan.getMembers().size() - 1; m++)
-        {
-            client.clientInfo(client, chan.getMembers()[m]);
-            client.print("JOIN " + chan.getName() + "\r\n");
-        }
         if (chan.getTopic() != "")
         {
             client.clientInfo(client, client);
@@ -153,6 +174,11 @@ void Server :: addToChannel(Channel &chan, Client &client)
         client.print("\r\n");
         client.clientInfo(client, client);
         client.print(client.getNick() + " " + chan.getName() + " :End of /NAMES list\r\n");
+        for (size_t m = 0; m < chan.getMembers().size() - 1; m++)
+        {
+            client.clientInfo(client, chan.getMembers()[m]);
+            client.print("JOIN " + chan.getName() + "\r\n");
+        }
     }
     else
         client.print("You are already in the channel " + chan.getName() + "\r\n");

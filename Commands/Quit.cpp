@@ -30,6 +30,7 @@ void Server::QUIT(Client &client)
             }
         }
         client.setLoggin(false);
+        this->commands.clear();
         close(this->acc_val);
     }
     close(this->acc_val);

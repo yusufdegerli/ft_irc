@@ -40,6 +40,9 @@ class Server
         std::vector<Channel> channels;
         std::vector<std::string> commands;
     public:
+        Server();
+        Server(Server const &New);
+        void    operator=(Server const &New);
         Server(int port, std::string password);
         ~Server();
 

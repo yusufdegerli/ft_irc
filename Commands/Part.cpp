@@ -33,6 +33,8 @@ void Server::PART(Client &client)
                     for (size_t m = 0; m < chan.getMembers().size(); m++)
                         chan.getMembers()[m].print(":" + client.getNick() + "!" + client.getUsername() + '@' + client.getRealIp() + " PART " + chan.getName() + " "+ reason + "\r\n");
                     chan.getMembers().erase(chan.getMembers().begin() + i);
+                    if (chan.getMembers().empty())
+                        this->channels.erase(this->channels.begin() + this->returnChannelIndex(chan.getName()));
                     break ;
                 }
             }

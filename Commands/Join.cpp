@@ -32,7 +32,7 @@ void Server :: JOIN(Client &client)
 
     if (this->commands.size() < 2)
     {
-        client.print(":" + client.getRealIp() + " 461 " + client.getNick() + "JOIN : Not enough parameters\r\n");
+        client.print(":" + client.getRealIp() + " 461 " + client.getNick() + " JOIN : Not enough parameters\r\n");
         return ;
     }
     if (this->commands.size() < 3)
@@ -80,7 +80,7 @@ void Server :: JOIN(Client &client)
                 }
                 else
                 {
-                    client.print(":" + this->getServerIP() + " 475" + client.getNick() + " " + chan.getName() + " :Cannot join channel (+k)" + "\r\n");
+                    client.print(":" + this->getServerIP() + " 475 " + client.getNick() + " " + chan.getName() + " :Cannot join channel (+k)" + "\r\n");
                     channel_list.clear();
                     key_list.clear();
                     return ;
@@ -90,7 +90,7 @@ void Server :: JOIN(Client &client)
             {
                 if (chan.getInviteOnly() && !client.ifHasInvitation(chan.getName()))
                 {
-                    client.print(":" + this->getServerIP() + " 473" + client.getNick() + " " + chan.getName() + " :Cannot join channel (+i)\n");
+                    client.print(":" + this->getServerIP() + " 473 " + client.getNick() + " " + chan.getName() + " :Cannot join channel (+i)\n");
                     channel_list.clear();
                     key_list.clear();
                     return ;

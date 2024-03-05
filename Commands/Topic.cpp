@@ -8,7 +8,7 @@ void Server::TOPIC(Client &client)
 
     if (this->commands.size() < 2)
     {
-        client.print("::" + this->getServerIP() + " 461 "+ client.getNick() + " TOPIC :Not enough parameters" + "\r\n");
+        client.print(":" + this->getServerIP() + " 461 "+ client.getNick() + " TOPIC :Not enough parameters" + "\r\n");
         return ;
     }
     if (this->commands.size() == 3)
@@ -18,7 +18,7 @@ void Server::TOPIC(Client &client)
         Channel &chan = this->channels[returnChannelIndex(this->commands[1])];
         for (size_t j = 3; j < this->commands.size(); j++)
             topic += " " + this->commands[j];
-        if (topic[0] == ':')
+        if (this->commands[1][0] == ':')
         {
             if (!topic.compare(":"))
                 chan.setTopic("");
