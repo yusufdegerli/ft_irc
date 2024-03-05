@@ -71,8 +71,6 @@ void Server :: serverFunc()
                 if (checkRecvStatus(recv(this->fds[i].fd, buff, sizeof(buff), 0), i) == 1)
                 {
                     std::cout << "client message: " << buff << std::endl;
-                    // pieceByPiece(buff, bufferRaw, &this->clients[i - 1]); //bufferRaw keeps the commandlines with their options, not only commands
-                    // cmd.commandCntl(bufferRaw.back(), this->acc_val);
                     parseMessage(buff);
                     executeCommands(i);
                 }

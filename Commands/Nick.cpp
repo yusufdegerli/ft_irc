@@ -1,6 +1,5 @@
 #include "../Server/Server.hpp"
 
-// Ünlemden sonra (!) host gelicek
 void Server :: NICK(Client &client)
 {
      if (client.getNick() != "")
@@ -21,9 +20,9 @@ void Server :: NICK(Client &client)
         nameCnt++;
     }
 
-    if (this->commands.size() != 2 || this->commands.size() == 1)
+    if (this->commands.size() == 1)
     {
-        client.print(":" + this->getServerIP() + " 431 " + client.getNick() + " : No nickname given\r\n");
+        client.print(":" + this->getServerIP() + " 431 " + client.getNick() + " :No nickname given\r\n");
         return ;
     }
     

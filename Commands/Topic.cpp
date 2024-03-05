@@ -2,6 +2,8 @@
 
 void Server::TOPIC(Client &client)
 {
+    if(this->checkActivation(client) == -1)
+        return ;
     std::string topic = "";
 
     if (this->commands.size() < 2)

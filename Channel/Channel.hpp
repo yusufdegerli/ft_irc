@@ -27,7 +27,6 @@ class Channel{
         bool invite_only;
     public:
         Channel();
-        // Channel(std::string const &name);
         Channel(std::string name);
         Channel(std::string name, std::string key);
         Channel(Channel const &New);
@@ -54,6 +53,4 @@ class Channel{
         
         void    setTopic(std::string topic);
         int returnOperatorIndex(std::string nick);
-
-        //void writeMembersByName(std::vector<Client> members);
 };

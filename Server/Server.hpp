@@ -40,9 +40,6 @@ class Server
         std::vector<Channel> channels;
         std::vector<std::string> commands;
     public:
-        Server();
-        Server(Server const &cpy);
-        void operator=(const Server &val);
         Server(int port, std::string password);
         ~Server();
 
@@ -89,4 +86,3 @@ class Server
 };
 
 std::vector<std::string> create_list(std::string str);
-void pieceByPiece(char *buff, std::vector<std::string> &bufferRaw);

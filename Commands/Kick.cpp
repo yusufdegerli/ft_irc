@@ -1,7 +1,9 @@
 #include "../Server/Server.hpp"
-//KICK <channel> <user> <comment>
+
 void Server :: KICK(Client &client)
 {
+    if(this->checkActivation(client) == -1)
+        return ;
     std::string comment = "";
     for (size_t j = 0; j < this->commands.size(); j++)
     {

@@ -27,16 +27,7 @@ Channel::Channel(std::string name, std::string key)
 }
 
 
-Channel::Channel(Channel const &cpy)
-{
-     this->topic = cpy.topic;
-    this->name = cpy.name;
-    this->Operators = cpy.Operators;
-    this->members = cpy.members;
-    this->key = cpy.key;
-    this->key_required = cpy.key_required;
-    this->invite_only = cpy.invite_only;
-}
+Channel::Channel(Channel const &cpy){*this = cpy;}
 
 void    Channel::operator=(Channel const &cpy)
 {

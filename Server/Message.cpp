@@ -37,10 +37,8 @@ void Server :: executeCommands(int fd)
         return ;
     for (i = 0; i < 13; i++)
     {
-        if (this->commands[0] == commands[i]) // check activation for all functions
+        if (this->commands[0] == commands[i])
         {
-            if (i > 0 && this->checkActivation(*client) == -1)
-                return ;
             std::cout << client->getinServer() << std::endl;
             (this->*(cmds[i]))(*client);
             break;
@@ -54,7 +52,7 @@ void Server :: executeCommands(int fd)
 
 int Server :: checkActivation(Client &client)
 {
-    if (!client.getinServer())
+    if (client.getinServer() == false)
     {
         client.print("Log into the system first. Use PASS command\n");
         return -1;

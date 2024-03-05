@@ -42,7 +42,6 @@ int Server :: checkRecvStatus(int recv_val, int i)
 {
     if (recv_val < 0)
     {
-        //recv okuma yapamazsa veya client bağlantıyı kopardıysa buraya giriyor.
         std::cerr << "Recv error" << std::endl;
         exit(1);
     }

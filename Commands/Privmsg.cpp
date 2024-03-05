@@ -2,13 +2,16 @@
 
 void Server :: PRIVMSG(Client &client)
 {
-    //mesajdan önce ':' olmalı
     size_t i = 0;
+    if(this->checkActivation(client) == -1)
+        return ;
     std::string message = "";
-    for (size_t j = 2; j < this->commands.size(); j++)
+    if (this->commands.size() > 2)
+        message += this->commands[2].substr(1);
+    for (size_t j = 3; j < this->commands.size(); j++)
     {
-        message += this->commands[j];
         message += " ";
+        message += this->commands[j];
     }
     if (this->commands.size() == 1)
     {

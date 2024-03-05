@@ -2,7 +2,6 @@
 
 Client::Client(int fd)
 {
-    //this->usrName = "";
     this->usrUser = "";
     this->usrNick = "";
     this->socketNumber = fd;
@@ -16,11 +15,9 @@ Client::Client()
     this->socketNumber = -1;
     this->realIp = -1;
 
-    //this->usrName = "";
     this->usrNick = "";
-    this->usrSurname = "";
     this->usrUser = "";
-    this->hostName = "";
+    this->RealName = "";
 
     this->isLogged = false;
     this->inServer = false;
@@ -32,11 +29,11 @@ void    Client::operator=(Client const &cpy)
 {
     this->socketNumber = cpy.socketNumber;
     this->realIp = cpy.realIp;
-    // this->usrName = cpy.usrName;
     this->usrNick = cpy.usrNick;
-    this->usrSurname = cpy.usrSurname;
     this->usrUser = cpy.usrUser;
-    this->hostName = cpy.hostName;
+    this->RealName = cpy.RealName;
+    this->isLogged = cpy.isLogged;
+    this->inServer = cpy.inServer;
 }
 
 void Client::setSocket(const int socket)
@@ -44,10 +41,10 @@ void Client::setSocket(const int socket)
     this->socketNumber = socket;
 }
 
-void Client::setHostname(const std::string &hostname)
+void Client::setRealName(const std::string &RealName)
 {
-    this->hostName = hostname;
-    std::cout << "user host: " << this->hostName << std::endl;
+    this->RealName = RealName;
+    std::cout << "user host: " << this->RealName << std::endl;
 }
 
 void Client::setUsrNick(const std::string &usrNick)
@@ -64,16 +61,9 @@ void Client::setUsrNick(const std::string &usrNick)
     this->print("Real name: " + this->usrName + "\n");
 } */
 
-void Client::setUsrSurname(const std::string &usrSurname)
-{
-    this->usrSurname = usrSurname;
-    std::cout << "user surname: " << this->usrSurname << std::endl;
-}
-
 void Client::setUsername(const std::string &usrUser)
 {
     this->usrUser = usrUser;
-    //this->usrName = usrUser;
     std::cout << "user: " << this->usrUser << std::endl;
 }
 
@@ -114,7 +104,6 @@ bool Client :: getLoggedStatus()
 void Client :: print(std::string str)
 {
     send(this->socketNumber, str.c_str(), str.length(),  0);
-    // std::cout << str << std::endl;
 }
 
 void Client :: clientInfo(Client &receive, Client &client)
@@ -137,9 +126,9 @@ std::string Client :: getUsername()
     return this->usrUser;
 }
 
-std::string Client :: getHostname()
+std::string Client :: getRealName()
 {
-    return this->hostName;
+    return this->RealName;
 }
 
 std::string &Client::getRealIp() {return this->realIp;}

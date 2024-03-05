@@ -5,9 +5,11 @@ void Server::PART(Client &client)
     std::string channels = this->commands[1];
     std::string reason = "";
 
+    if(this->checkActivation(client) == -1)
+        return ;
     if (this->commands.size() < 2)
     {
-        client.print("::" + this->getServerIP() + " 461 " + client.getNick() + " PART :Not enough parameters" + "\r\n"); // 461
+        client.print(":" + this->getServerIP() + " 461 " + client.getNick() + " PART :Not enough parameters" + "\r\n");
         return ;
     }
     if (this->commands.size() == 3)

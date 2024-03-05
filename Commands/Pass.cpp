@@ -2,7 +2,7 @@
 
 void Server :: PASS(Client &client)
 {
-    if (client.getLoggedStatus())
+    if (client.getLoggedStatus() == true || client.getinServer() == true)
     {
         client.print(":" + this->getServerIP() + " 462 " + client.getNick() + " :You may not reregister\r\n");
         return ;
@@ -14,7 +14,7 @@ void Server :: PASS(Client &client)
         return ;
     }
 
-    if (this->password == this->commands[1])
+    if (this->password == this->commands[1].substr(1)) //********* memory leak?
     {
         client.print("You are in the system\n");
         client.setInServer(true);

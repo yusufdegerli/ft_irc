@@ -3,6 +3,8 @@
 void Server :: WHO(Client &client)
 {
     size_t i = 0;
+    if(this->checkActivation(client) == -1)
+        return ;
     if(this->commands[1][0] == '#' && this->findChannel(this->commands[1]))
     {
         for (size_t j = 0; j < this->channels[returnChannelIndex(this->commands[1])].getMembers().size(); j++)
@@ -22,9 +24,8 @@ void Server :: WHO(Client &client)
                 {
                     client.print("Nick: " + this->channels[i].getMembers()[i].getNick() + "\n");
                     client.print("Ip: " + this->channels[i].getMembers()[i].getRealIp() + "\n");
-                    client.print("Hostname: " + this->channels[i].getMembers()[i].getHostname() + "\n");
+                    client.print("RealName: " + this->channels[i].getMembers()[i].getRealName() + "\n");
                     client.print("Username: " + this->channels[i].getMembers()[i].getUsername() + "\n");
-                    //client.print("Name: " + this->channels[i].getMembers()[i].getName() + "\n");
                 }
                 break ;
             }

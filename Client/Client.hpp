@@ -20,11 +20,9 @@ class Client
 {
     protected:
         int socketNumber;
-        std::string hostName; //check if it is correct
+        std::string RealName;
 
         std::string usrNick;
-        //std::string usrName; //check if it is necessary
-        std::string usrSurname;
         std::string usrUser;
         std::string realIp;
 
@@ -38,10 +36,8 @@ class Client
         Client(Client const &cpy);
         
         void setSocket(const int socket);
-        void setHostname(const std::string &hostname);
+        void setRealName(const std::string &RealName);
         void setUsrNick(const std::string &usrNick);
-        //void setUsrName(const std::string &usrName);
-        void setUsrSurname(const std::string &usrSurname);
         void setUsername(const std::string &usrUser);
         void setRealIp(const std::string &realIp);
         void setFd(int fd);
@@ -58,13 +54,11 @@ class Client
         int getFd();
         int getSocket();
         std::string getNick() const;
-        //std::string getName();
         std::string getUsername();
-        std::string getHostname();
+        std::string getRealName();
         bool getinServer();
         void setInServer(bool status);
         bool ifHasInvitation(std::string chan);
-        //std::vector<std::string> getHasInvitationTo();
         void setHasInvitationTo(std::string channel);
 
 };

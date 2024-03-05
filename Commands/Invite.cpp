@@ -5,6 +5,9 @@ void Server :: INVITE(Client &client)
     std::string nickname = this->commands[1];
     std::string channel = this->commands[2];
 
+    if(this->checkActivation(client) == -1)
+        return ;
+
     if (this->commands.size() < 3)
     {
         client.print(":" + this->getServerIP() + " 461" + client.getNick() + " INVITE :Not enough parameters" + "\r\n");

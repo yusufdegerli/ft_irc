@@ -26,7 +26,9 @@ void Server :: JOIN(Client &client)
     std::string channels = this->commands[1];
     std::vector<std::string> key_list;
     std::string keys;
-    std::cout << client.getinServer() << std::endl;
+
+    if(this->checkActivation(client) == -1)
+        return ;
     if (this->commands.size() < 3)
     {
         keys = "";
@@ -98,7 +100,6 @@ void Server :: JOIN(Client &client)
         }
     }
 
-    // //check if the client can join the channel
     // //this command also accepts the special argument of ("0", 0x30) instead of any of the usual parameters, which requests that the sending client leave all channels they are currently connected to. The server will process this command as though the client had sent a PART command for each channel they are a member of.
        
     channel_list.clear();
