@@ -25,33 +25,36 @@ int Channel :: returnOperatorIndex(std::string nick)
 void Channel :: inviteOnly(char command, Client &client)
 {
     if (command == '-')
+    {
         this->invite_only = false;
+        client.print("Channel is not invite only\n");
+    }
     else if (command == '+')
+    {
         this->invite_only = true;
+        client.print("Channel is invite only\n");
+    }
     else
-        client.print("Wrong use of the invite only mode command. Try +- before the keyword\n");
+        client.print(client.getNick() + " :Unknown MODE flag\n");
 }
 
 void Channel :: operators(char command, Client &operators, Client &client)
 {
     if (command == '-')
     {
-        std::cout << "size before remove: " << this->Operators.size() << std::endl;
         if (this->checkOperators(operators))
         {
-            client.print("hopefully deleted\r\n");
-            this->Operators.erase(this->Operators.begin() + this->returnOperatorIndex(operators.getNick()));        
+            this->Operators.erase(this->Operators.begin() + this->returnOperatorIndex(operators.getNick()));
+            client.print(operators.getNick() + " is deleted from operators list of the " + this->getName() + " channel\n");
         }   
-        std::cout << "size after remove: " << this->Operators.size() << std::endl;
     }
     else if (command == '+')
     {
-        std::cout << "size before add: " << this->Operators.size() << std::endl;
         this->Operators.push_back(operators);
-        std::cout << "size after add: " << this->Operators.size() << std::endl;
+        client.print(operators.getNick() + " is added as an operator in " + this->getName() + " channel\n");
     }
     else
-        client.print("Wrong use of the operators mode command. Try +- before the keyword\r\n");
+        client.print(client.getNick() + " :Unknown MODE flag\n");
 }
 
 void Channel :: keys(char command, std::string key, Client &client)
@@ -60,14 +63,16 @@ void Channel :: keys(char command, std::string key, Client &client)
     {
         this->key_required = false;
         this->key = "";
+        client.print("Channel doesn't requere a key\n");
     }
     else if (command == '+')
     {
         this->key_required = true;
         this->key = key;
+        client.print("Channel requeres a key\n");
     }
     else
-        client.print("Wrong use of the key mode command. Try +- before the keyword\n");
+        client.print(client.getNick() + " :Unknown MODE flag\n");
 }
 
 
@@ -78,7 +83,7 @@ void Server :: MODE(Client &client)
     
     if (this->commands.size() != 3 && this->commands.size() != 4)
     {
-        client.print("Not enough arguments\r\n");
+        client.print(client.getNick() + " MODE :Not enough parameters\n");
         return;
     }
     
@@ -89,7 +94,7 @@ void Server :: MODE(Client &client)
     }
     if (!this->findChannel(this->commands[1]))
     {
-        client.print("Channel doesn't exist\r\n");
+        client.print(client.getNick() + " :No such channel\n");
         return;
     }
     else
@@ -97,7 +102,7 @@ void Server :: MODE(Client &client)
         Channel &channel = this->channels[returnChannelIndex(this->commands[1])];
         if (!channel.checkOperators(client))
         {
-            client.print("Only operators of the channel can use MODE command and you are not one\r\n");
+            client.print(client.getNick() +  " " + channel.getName() + " :You're not channel operator\n");
             return ;
         }
         
@@ -107,7 +112,7 @@ void Server :: MODE(Client &client)
         {
             if (this->getClient(this->commands[3]) == -1)
             {
-                client.print("Client with this nick doesn't exist\r\n");
+                client.print(client.getUsername() + ": " + this->commands[3] + " :No such nick/channel\r\n");
                 return ;
             }
             channel.operators(this->commands[2][0], this->clients[this->getClient(this->commands[3])], client);
@@ -115,7 +120,7 @@ void Server :: MODE(Client &client)
         else if (this->commands[2][1] == 'k' && this->commands[2].size() == 2)
             channel.keys(this->commands[2][0], this->commands[3], client);
         else
-            client.print("The kws of the command was not found\r\n");
+            client.print(client.getNick() + " :Unknown MODE flag\n");
     }
 
 }

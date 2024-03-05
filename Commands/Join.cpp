@@ -56,7 +56,7 @@ void Server :: JOIN(Client &client)
         if (this->findChannel(channel_list[i]))
         {
             Channel &chan = this->channels[returnChannelIndex(channel_list[i])];
-            if (chan.getKeyRequired())
+            if (chan.getKeyRequired() && !chan.getInviteOnly())
             {
                 if (!keys.empty())
                 {
@@ -71,7 +71,7 @@ void Server :: JOIN(Client &client)
             else
             {
                 if (chan.getInviteOnly() && !client.ifHasInvitation(chan.getName()))
-                    client.print("To join this channel you need an invitation");
+                    client.print(client.getNick() + " " + chan.getName() + " :Cannot join channel (+i)\n");
                 else
                     this->addToChannel(chan, client);
             }

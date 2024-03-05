@@ -7,17 +7,7 @@ void Server :: USER(Client &client)
         client.print("Real name is already set\n");
         return ;
     }
-    if (client.getinServer() == 0)
-    {
-        client.print("Log into the system first. Use PASS command\n");
-        return ;
-    }
-    
-    if (client.getNick() == "")
-    {
-        client.print("Set nickname first. Use NICK command\n");
-        return ;
-    }
+
     if (this->commands.size() < 5)
     {
         client.print(":" + client.getRealIp() + " 462 " + client.getNick() + " USER : Not enough parameters\r\n");
@@ -54,7 +44,7 @@ void Server :: USER(Client &client)
         client.print(":" + client.getRealIp() + " 251 " + client.getNick() + " There are " + "UNKOWN!" + " users and 0 services on 1 server\r\n");
         return ;
     }
-    else
+    else // maybe something like wrong usage is better
     {
         client.print(":<serverip> or <hostname> 462 " + client.getNick() + "USER : You may not reregister\r\n");
         return ; 
