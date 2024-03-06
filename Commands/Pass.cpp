@@ -14,7 +14,7 @@ void Server :: PASS(Client &client)
         return ;
     }
 
-    if (this->password == this->commands[1].substr(1)) //********* memory leak?
+    if (this->password == this->commands[1].substr(1))
     {
         client.print("You are in the system\n");
         client.setInServer(true);

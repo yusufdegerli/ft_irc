@@ -68,8 +68,8 @@ void Server :: start()
     this->setServerfd(socket(AF_INET, SOCK_STREAM, 0));
     setsockopt(this->serverfd, SOL_SOCKET, SO_REUSEADDR, &this->optv, sizeof(this->optv));
     
-    checkBindStatus(bind(this->serverfd, (const sockaddr *)&this->server_address, this->adr_len)); // istenilen soketi, verilen adrese bağlıyor. BU kadar!
-    checkListenStatus(listen(this->serverfd, 5));//Gelen bağlantıları, bekletir. İkinci parametre kaç tane bağlantının beklemesi gerektiğini söyler.
+    checkBindStatus(bind(this->serverfd, (const sockaddr *)&this->server_address, this->adr_len));
+    checkListenStatus(listen(this->serverfd, 5));
     
     struct pollfd server;
 	this->fds.push_back(server);
@@ -88,12 +88,12 @@ void Server :: serverFunc()
 
     while(1)
     {
-        checkPollStatus(poll(&(this->fds[0]), this->fds.size(), -1));// Süresiz bekleyin
+        checkPollStatus(poll(&(this->fds[0]), this->fds.size(), -1));
         userAccept();
         for (size_t i = 1; i < this->fds.size(); i++)
         {
             if (this->fds[i].fd != -1 && this->fds[i].revents & POLLIN) {
-                char buff[1024] = {0}; // her recv fonksiyonu çalıştığında saçma sapan, ascii dışında karakterler geliyor. Böyle yaparak bunu önlüyorum.
+                char buff[1024] = {0}; 
                 if (checkRecvStatus(recv(this->fds[i].fd, buff, sizeof(buff), 0), i) == 1)
                 {
                     std::cout << "client message: " << buff << std::endl;

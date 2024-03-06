@@ -26,7 +26,7 @@ void Server::TOPIC(Client &client)
                 chan.setTopic(topic);
         }
         else
-            client.print(":" + this->getServerIP() + " 332 " + client.getNick() + " "+ chan.getName() + ":" + chan.getTopic() + "\r\n");//332
+            client.print(":" + this->getServerIP() + " 332 " + client.getNick() + " "+ chan.getName() + ":" + chan.getTopic() + "\r\n");
     }
     else
     {
